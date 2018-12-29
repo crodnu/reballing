@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{87BBCBB6-F4AE-42A2-AED3-A95B01C7D9B7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>leervolt</RootNamespace>
+    <AssemblyName>leervolt</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ArduinoDriver, Version=2.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoDriver.2.4.6\lib\net452\ArduinoDriver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ArduinoSerialControllerClient, Version=1.0.6552.15035, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\ArduinoSerialControllerClient.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ArduinoSerialControllerClient.Tests, Version=1.0.6540.16354, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\ArduinoSerialControllerClient.Tests.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ArduinoUploader">
+      <HintPath>..\packages\ArduinoUploader.3.1.0\lib\net452\ArduinoUploader.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DetectPort, Version=1.0.6538.39070, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\DetectPort.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="duinocom, Version=1.0.6538.39070, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\duinocom.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="duinocom-i, Version=1.0.6538.39071, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\duinocom-i.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="duinocom-ls, Version=1.0.6538.39071, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\duinocom-ls.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="duinocom.core, Version=1.0.6552.8622, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\duinocom.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Duinocom.Tests, Version=1.0.6538.39069, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\Duinocom.Tests.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="duinocom.Upload, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\duinocom.Upload.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="duinocom.Upload.Tests, Version=1.0.6538.39072, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\duinocom.Upload.Tests.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="IntelHexFormatReader, Version=2.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\IntelHexFormatReader.2.2.3\lib\net45\IntelHexFormatReader.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.4.10\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\ArduinoSerialControllerClient.1.0.7\lib\net40\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RJCP.SerialPortStream">
+      <HintPath>..\packages\SerialPortStream.2.1.2\lib\net45\RJCP.SerialPortStream.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Curva1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Curva1.Designer.cs">
+      <DependentUpon>Curva1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Curva2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Curva2.Designer.cs">
+      <DependentUpon>Curva2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Curva3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Curva3.Designer.cs">
+      <DependentUpon>Curva3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Curva1.resx">
+      <DependentUpon>Curva1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Curva2.resx">
+      <DependentUpon>Curva2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Curva3.resx">
+      <DependentUpon>Curva3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
