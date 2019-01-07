@@ -34,3 +34,5 @@
 # Folders
 /leervolt/obj
 /leervolt/.vs
+/leervolt/bin
+/leervolt/packages
