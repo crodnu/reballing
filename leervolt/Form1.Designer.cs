@@ -40,7 +40,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.controlTemperatureLabel = new System.Windows.Forms.Label();
-            this.arduinoPort = new System.IO.Ports.SerialPort(this.components);
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.startButton = new System.Windows.Forms.Button();
             this.pauseButton = new System.Windows.Forms.Button();
             this.runningIndicator = new System.Windows.Forms.PictureBox();
@@ -51,18 +51,19 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.sendDataButton = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.temperatureChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.timer = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.intelButton = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.xBoxButton = new System.Windows.Forms.Button();
-            this.otherChipButton = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             this.lowerProbeTemperature = new System.Windows.Forms.Label();
             this.upperProbeTemperature = new System.Windows.Forms.Label();
             this.lowerResistanceIcon1 = new System.Windows.Forms.PictureBox();
@@ -70,13 +71,22 @@
             this.lowerResistanceIcon3 = new System.Windows.Forms.PictureBox();
             this.lowerResistanceIcon4 = new System.Windows.Forms.PictureBox();
             this.upperResistanceIcon = new System.Windows.Forms.PictureBox();
-            this.upperFanOnIcon = new System.Windows.Forms.PictureBox();
-            this.upperFanOffIcon = new System.Windows.Forms.PictureBox();
-            this.lowerFanOffIcon = new System.Windows.Forms.PictureBox();
+            this.pictureBox8 = new System.Windows.Forms.PictureBox();
+            this.lowerResistanceLabel1 = new System.Windows.Forms.Label();
+            this.lowerResistanceLabel2 = new System.Windows.Forms.Label();
+            this.lowerResistanceLabel3 = new System.Windows.Forms.Label();
+            this.lowerResistanceLabel4 = new System.Windows.Forms.Label();
+            this.upperResistanceLabel = new System.Windows.Forms.Label();
+            this.upperFanLabel = new System.Windows.Forms.Label();
+            this.upperFanIcon = new System.Windows.Forms.PictureBox();
+            this.pictureBox12 = new System.Windows.Forms.PictureBox();
             this.stopButton = new System.Windows.Forms.Button();
-            this.lowerFanOnIcon = new System.Windows.Forms.PictureBox();
-            this.idkWhatThisIsLabel1 = new System.Windows.Forms.Label();
-            this.idkWhatThisIsLabel2 = new System.Windows.Forms.Label();
+            this.lowerFanIcon = new System.Windows.Forms.PictureBox();
+            this.lowerFanLabel = new System.Windows.Forms.Label();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.finishIndicator = new System.Windows.Forms.PictureBox();
             this.pictureBox13 = new System.Windows.Forms.PictureBox();
             this.pictureBox14 = new System.Windows.Forms.PictureBox();
             this.pictureBox15 = new System.Windows.Forms.PictureBox();
@@ -88,10 +98,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.lowerResistanceIcon3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowerResistanceIcon4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.upperResistanceIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperFanOnIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperFanOffIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lowerFanOffIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lowerFanOnIcon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.upperFanIcon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowerFanIcon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.finishIndicator)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).BeginInit();
@@ -107,7 +118,7 @@
             this.exitButton.Text = "Salir";
             this.exitButton.UseVisualStyleBackColor = true;
             this.exitButton.Visible = false;
-            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
+            this.exitButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // portComboBox
             // 
@@ -138,6 +149,7 @@
             this.label3.Size = new System.Drawing.Size(245, 20);
             this.label3.TabIndex = 4;
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // controlTemperatureLabel
             // 
@@ -149,12 +161,13 @@
             this.controlTemperatureLabel.Name = "controlTemperatureLabel";
             this.controlTemperatureLabel.Size = new System.Drawing.Size(140, 57);
             this.controlTemperatureLabel.TabIndex = 5;
+            this.controlTemperatureLabel.Click += new System.EventHandler(this.label4_Click);
             // 
-            // arduinoPort
+            // serialPort1
             // 
-            this.arduinoPort.DtrEnable = true;
-            this.arduinoPort.PortName = "COM3";
-            this.arduinoPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.arduinoPort_DataReceived);
+            this.serialPort1.DtrEnable = true;
+            this.serialPort1.PortName = "COM3";
+            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // startButton
             // 
@@ -166,7 +179,7 @@
             this.startButton.TabIndex = 7;
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Visible = false;
-            this.startButton.Click += new System.EventHandler(this.startButton_Click);
+            this.startButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // pauseButton
             // 
@@ -178,7 +191,7 @@
             this.pauseButton.TabIndex = 8;
             this.pauseButton.UseVisualStyleBackColor = true;
             this.pauseButton.Visible = false;
-            this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
+            this.pauseButton.Click += new System.EventHandler(this.button3_Click);
             // 
             // runningIndicator
             // 
@@ -235,6 +248,7 @@
             this.label2.Size = new System.Drawing.Size(20, 13);
             this.label2.TabIndex = 19;
             this.label2.Text = "T1";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // sendDataButton
             // 
@@ -245,7 +259,16 @@
             this.sendDataButton.Text = "Enviar";
             this.sendDataButton.UseVisualStyleBackColor = true;
             this.sendDataButton.Visible = false;
-            this.sendDataButton.Click += new System.EventHandler(this.sendDataButton_Click);
+            this.sendDataButton.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // label6
+            // 
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(129, 198);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 20);
+            this.label6.TabIndex = 21;
+            this.label6.Text = "label6";
             // 
             // label7
             // 
@@ -291,9 +314,9 @@
             this.temperatureChart.TabIndex = 27;
             this.temperatureChart.Text = "chart1";
             // 
-            // timer
+            // timer1
             // 
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // label11
             // 
@@ -323,16 +346,16 @@
             this.label8.TabIndex = 30;
             this.label8.Text = "T3";
             // 
-            // intelButton
+            // button9
             // 
-            this.intelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.intelButton.Location = new System.Drawing.Point(40, 463);
-            this.intelButton.Name = "intelButton";
-            this.intelButton.Size = new System.Drawing.Size(78, 29);
-            this.intelButton.TabIndex = 31;
-            this.intelButton.Text = "Intel P 4";
-            this.intelButton.UseVisualStyleBackColor = true;
-            this.intelButton.Click += new System.EventHandler(this.intelButton_Click);
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.Location = new System.Drawing.Point(40, 463);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(78, 29);
+            this.button9.TabIndex = 31;
+            this.button9.Text = "Intel P 4";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // textBox6
             // 
@@ -359,27 +382,27 @@
             this.label10.TabIndex = 34;
             this.label10.Text = "Tiempo2";
             // 
-            // xBoxButton
+            // button10
             // 
-            this.xBoxButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xBoxButton.Location = new System.Drawing.Point(40, 514);
-            this.xBoxButton.Name = "xBoxButton";
-            this.xBoxButton.Size = new System.Drawing.Size(78, 29);
-            this.xBoxButton.TabIndex = 35;
-            this.xBoxButton.Text = "X Box 360";
-            this.xBoxButton.UseVisualStyleBackColor = true;
-            this.xBoxButton.Click += new System.EventHandler(this.xBoxButton_Click);
+            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button10.Location = new System.Drawing.Point(40, 514);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(78, 29);
+            this.button10.TabIndex = 35;
+            this.button10.Text = "X Box 360";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
-            // otherChipButton
+            // button11
             // 
-            this.otherChipButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.otherChipButton.Location = new System.Drawing.Point(40, 569);
-            this.otherChipButton.Name = "otherChipButton";
-            this.otherChipButton.Size = new System.Drawing.Size(78, 29);
-            this.otherChipButton.TabIndex = 36;
-            this.otherChipButton.Text = "Curva 3";
-            this.otherChipButton.UseVisualStyleBackColor = true;
-            this.otherChipButton.Click += new System.EventHandler(this.otherChipButton_Click);
+            this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button11.Location = new System.Drawing.Point(40, 569);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(78, 29);
+            this.button11.TabIndex = 36;
+            this.button11.Text = "Curva 3";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // lowerProbeTemperature
             // 
@@ -404,6 +427,7 @@
             this.upperProbeTemperature.Name = "upperProbeTemperature";
             this.upperProbeTemperature.Size = new System.Drawing.Size(140, 57);
             this.upperProbeTemperature.TabIndex = 7;
+            this.upperProbeTemperature.Click += new System.EventHandler(this.label13_Click);
             // 
             // lowerResistanceIcon1
             // 
@@ -463,41 +487,101 @@
             this.upperResistanceIcon.TabStop = false;
             this.upperResistanceIcon.WaitOnLoad = true;
             // 
-            // upperFanOnIcon
+            // pictureBox8
             // 
-            this.upperFanOnIcon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.upperFanOnIcon.Image = ((System.Drawing.Image)(resources.GetObject("upperFanOnIcon.Image")));
-            this.upperFanOnIcon.Location = new System.Drawing.Point(493, 106);
-            this.upperFanOnIcon.Name = "upperFanOnIcon";
-            this.upperFanOnIcon.Size = new System.Drawing.Size(47, 38);
-            this.upperFanOnIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.upperFanOnIcon.TabIndex = 45;
-            this.upperFanOnIcon.TabStop = false;
-            this.upperFanOnIcon.WaitOnLoad = true;
+            this.pictureBox8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
+            this.pictureBox8.Location = new System.Drawing.Point(493, 106);
+            this.pictureBox8.Name = "pictureBox8";
+            this.pictureBox8.Size = new System.Drawing.Size(47, 38);
+            this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox8.TabIndex = 45;
+            this.pictureBox8.TabStop = false;
+            this.pictureBox8.WaitOnLoad = true;
             // 
-            // upperFanOffIcon
+            // lowerResistanceLabel1
             // 
-            this.upperFanOffIcon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.upperFanOffIcon.Image = ((System.Drawing.Image)(resources.GetObject("upperFanOffIcon.Image")));
-            this.upperFanOffIcon.Location = new System.Drawing.Point(493, 106);
-            this.upperFanOffIcon.Name = "upperFanOffIcon";
-            this.upperFanOffIcon.Size = new System.Drawing.Size(47, 38);
-            this.upperFanOffIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.upperFanOffIcon.TabIndex = 60;
-            this.upperFanOffIcon.TabStop = false;
-            this.upperFanOffIcon.WaitOnLoad = true;
+            this.lowerResistanceLabel1.AutoSize = true;
+            this.lowerResistanceLabel1.Location = new System.Drawing.Point(550, 171);
+            this.lowerResistanceLabel1.Name = "lowerResistanceLabel1";
+            this.lowerResistanceLabel1.Size = new System.Drawing.Size(41, 13);
+            this.lowerResistanceLabel1.TabIndex = 47;
+            this.lowerResistanceLabel1.Text = "label14";
+            this.lowerResistanceLabel1.TextChanged += new System.EventHandler(this.label14_TextChanged);
             // 
-            // lowerFanOffIcon
+            // lowerResistanceLabel2
             // 
-            this.lowerFanOffIcon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.lowerFanOffIcon.Image = ((System.Drawing.Image)(resources.GetObject("lowerFanOffIcon.Image")));
-            this.lowerFanOffIcon.Location = new System.Drawing.Point(496, 179);
-            this.lowerFanOffIcon.Name = "lowerFanOffIcon";
-            this.lowerFanOffIcon.Size = new System.Drawing.Size(47, 38);
-            this.lowerFanOffIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.lowerFanOffIcon.TabIndex = 61;
-            this.lowerFanOffIcon.TabStop = false;
-            this.lowerFanOffIcon.WaitOnLoad = true;
+            this.lowerResistanceLabel2.AutoSize = true;
+            this.lowerResistanceLabel2.Location = new System.Drawing.Point(593, 171);
+            this.lowerResistanceLabel2.Name = "lowerResistanceLabel2";
+            this.lowerResistanceLabel2.Size = new System.Drawing.Size(41, 13);
+            this.lowerResistanceLabel2.TabIndex = 48;
+            this.lowerResistanceLabel2.Text = "label15";
+            this.lowerResistanceLabel2.TextChanged += new System.EventHandler(this.label15_TextChanged_1);
+            // 
+            // lowerResistanceLabel3
+            // 
+            this.lowerResistanceLabel3.AutoSize = true;
+            this.lowerResistanceLabel3.Location = new System.Drawing.Point(640, 171);
+            this.lowerResistanceLabel3.Name = "lowerResistanceLabel3";
+            this.lowerResistanceLabel3.Size = new System.Drawing.Size(41, 13);
+            this.lowerResistanceLabel3.TabIndex = 49;
+            this.lowerResistanceLabel3.Text = "label16";
+            this.lowerResistanceLabel3.TextChanged += new System.EventHandler(this.label16_TextChanged);
+            // 
+            // lowerResistanceLabel4
+            // 
+            this.lowerResistanceLabel4.AutoSize = true;
+            this.lowerResistanceLabel4.Location = new System.Drawing.Point(687, 171);
+            this.lowerResistanceLabel4.Name = "lowerResistanceLabel4";
+            this.lowerResistanceLabel4.Size = new System.Drawing.Size(41, 13);
+            this.lowerResistanceLabel4.TabIndex = 50;
+            this.lowerResistanceLabel4.Text = "label17";
+            this.lowerResistanceLabel4.TextChanged += new System.EventHandler(this.label17_TextChanged);
+            // 
+            // upperResistanceLabel
+            // 
+            this.upperResistanceLabel.AutoSize = true;
+            this.upperResistanceLabel.Location = new System.Drawing.Point(610, 105);
+            this.upperResistanceLabel.Name = "upperResistanceLabel";
+            this.upperResistanceLabel.Size = new System.Drawing.Size(41, 13);
+            this.upperResistanceLabel.TabIndex = 51;
+            this.upperResistanceLabel.Text = "label18";
+            this.upperResistanceLabel.TextChanged += new System.EventHandler(this.label18_TextChanged);
+            // 
+            // upperFanLabel
+            // 
+            this.upperFanLabel.AutoSize = true;
+            this.upperFanLabel.Location = new System.Drawing.Point(493, 87);
+            this.upperFanLabel.Name = "upperFanLabel";
+            this.upperFanLabel.Size = new System.Drawing.Size(41, 13);
+            this.upperFanLabel.TabIndex = 54;
+            this.upperFanLabel.Text = "label20";
+            this.upperFanLabel.TextChanged += new System.EventHandler(this.label20_TextChanged);
+            // 
+            // upperFanIcon
+            // 
+            this.upperFanIcon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.upperFanIcon.Image = ((System.Drawing.Image)(resources.GetObject("upperFanIcon.Image")));
+            this.upperFanIcon.Location = new System.Drawing.Point(496, 105);
+            this.upperFanIcon.Name = "upperFanIcon";
+            this.upperFanIcon.Size = new System.Drawing.Size(47, 38);
+            this.upperFanIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.upperFanIcon.TabIndex = 60;
+            this.upperFanIcon.TabStop = false;
+            this.upperFanIcon.WaitOnLoad = true;
+            // 
+            // pictureBox12
+            // 
+            this.pictureBox12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.pictureBox12.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox12.Image")));
+            this.pictureBox12.Location = new System.Drawing.Point(496, 179);
+            this.pictureBox12.Name = "pictureBox12";
+            this.pictureBox12.Size = new System.Drawing.Size(47, 38);
+            this.pictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox12.TabIndex = 61;
+            this.pictureBox12.TabStop = false;
+            this.pictureBox12.WaitOnLoad = true;
             // 
             // stopButton
             // 
@@ -508,38 +592,65 @@
             this.stopButton.Size = new System.Drawing.Size(88, 76);
             this.stopButton.TabIndex = 62;
             this.stopButton.UseVisualStyleBackColor = true;
-            this.stopButton.Visible = false;
-            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
+            this.stopButton.Click += new System.EventHandler(this.button4_Click);
             // 
-            // lowerFanOnIcon
+            // lowerFanIcon
             // 
-            this.lowerFanOnIcon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.lowerFanOnIcon.Image = ((System.Drawing.Image)(resources.GetObject("lowerFanOnIcon.Image")));
-            this.lowerFanOnIcon.Location = new System.Drawing.Point(496, 179);
-            this.lowerFanOnIcon.Name = "lowerFanOnIcon";
-            this.lowerFanOnIcon.Size = new System.Drawing.Size(47, 38);
-            this.lowerFanOnIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.lowerFanOnIcon.TabIndex = 63;
-            this.lowerFanOnIcon.TabStop = false;
-            this.lowerFanOnIcon.WaitOnLoad = true;
+            this.lowerFanIcon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.lowerFanIcon.Image = ((System.Drawing.Image)(resources.GetObject("lowerFanIcon.Image")));
+            this.lowerFanIcon.Location = new System.Drawing.Point(494, 177);
+            this.lowerFanIcon.Name = "lowerFanIcon";
+            this.lowerFanIcon.Size = new System.Drawing.Size(47, 38);
+            this.lowerFanIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.lowerFanIcon.TabIndex = 63;
+            this.lowerFanIcon.TabStop = false;
+            this.lowerFanIcon.WaitOnLoad = true;
             // 
-            // idkWhatThisIsLabel1
+            // lowerFanLabel
             // 
-            this.idkWhatThisIsLabel1.AutoSize = true;
-            this.idkWhatThisIsLabel1.Location = new System.Drawing.Point(811, 218);
-            this.idkWhatThisIsLabel1.Name = "idkWhatThisIsLabel1";
-            this.idkWhatThisIsLabel1.Size = new System.Drawing.Size(41, 13);
-            this.idkWhatThisIsLabel1.TabIndex = 66;
-            this.idkWhatThisIsLabel1.Text = "label21";
+            this.lowerFanLabel.AutoSize = true;
+            this.lowerFanLabel.Location = new System.Drawing.Point(490, 159);
+            this.lowerFanLabel.Name = "lowerFanLabel";
+            this.lowerFanLabel.Size = new System.Drawing.Size(41, 13);
+            this.lowerFanLabel.TabIndex = 65;
+            this.lowerFanLabel.Text = "label24";
+            this.lowerFanLabel.TextChanged += new System.EventHandler(this.label24_TextChanged_1);
             // 
-            // idkWhatThisIsLabel2
+            // timer2
             // 
-            this.idkWhatThisIsLabel2.AutoSize = true;
-            this.idkWhatThisIsLabel2.Location = new System.Drawing.Point(874, 218);
-            this.idkWhatThisIsLabel2.Name = "idkWhatThisIsLabel2";
-            this.idkWhatThisIsLabel2.Size = new System.Drawing.Size(41, 13);
-            this.idkWhatThisIsLabel2.TabIndex = 67;
-            this.idkWhatThisIsLabel2.Text = "label22";
+            this.timer2.Interval = 2000;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(811, 218);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(41, 13);
+            this.label21.TabIndex = 66;
+            this.label21.Text = "label21";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(874, 218);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(41, 13);
+            this.label22.TabIndex = 67;
+            this.label22.Text = "label22";
+            // 
+            // finishIndicator
+            // 
+            this.finishIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.finishIndicator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.finishIndicator.Image = ((System.Drawing.Image)(resources.GetObject("finishIndicator.Image")));
+            this.finishIndicator.Location = new System.Drawing.Point(821, 124);
+            this.finishIndicator.Name = "finishIndicator";
+            this.finishIndicator.Size = new System.Drawing.Size(75, 70);
+            this.finishIndicator.TabIndex = 68;
+            this.finishIndicator.TabStop = false;
+            this.finishIndicator.Visible = false;
+            this.finishIndicator.WaitOnLoad = true;
             // 
             // pictureBox13
             // 
@@ -603,13 +714,21 @@
             this.Controls.Add(this.pictureBox15);
             this.Controls.Add(this.pictureBox14);
             this.Controls.Add(this.pictureBox13);
-            this.Controls.Add(this.idkWhatThisIsLabel2);
-            this.Controls.Add(this.idkWhatThisIsLabel1);
-            this.Controls.Add(this.lowerFanOnIcon);
+            this.Controls.Add(this.finishIndicator);
+            this.Controls.Add(this.label22);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.lowerFanLabel);
+            this.Controls.Add(this.lowerFanIcon);
             this.Controls.Add(this.stopButton);
-            this.Controls.Add(this.lowerFanOffIcon);
-            this.Controls.Add(this.upperFanOffIcon);
-            this.Controls.Add(this.upperFanOnIcon);
+            this.Controls.Add(this.pictureBox12);
+            this.Controls.Add(this.upperFanIcon);
+            this.Controls.Add(this.upperFanLabel);
+            this.Controls.Add(this.upperResistanceLabel);
+            this.Controls.Add(this.lowerResistanceLabel4);
+            this.Controls.Add(this.lowerResistanceLabel3);
+            this.Controls.Add(this.lowerResistanceLabel2);
+            this.Controls.Add(this.lowerResistanceLabel1);
+            this.Controls.Add(this.pictureBox8);
             this.Controls.Add(this.upperResistanceIcon);
             this.Controls.Add(this.lowerResistanceIcon4);
             this.Controls.Add(this.lowerResistanceIcon3);
@@ -617,17 +736,18 @@
             this.Controls.Add(this.lowerResistanceIcon1);
             this.Controls.Add(this.upperProbeTemperature);
             this.Controls.Add(this.lowerProbeTemperature);
-            this.Controls.Add(this.otherChipButton);
-            this.Controls.Add(this.xBoxButton);
+            this.Controls.Add(this.button11);
+            this.Controls.Add(this.button10);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBox6);
-            this.Controls.Add(this.intelButton);
+            this.Controls.Add(this.button9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.temperatureChart);
             this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.sendDataButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox5);
@@ -653,10 +773,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.lowerResistanceIcon3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowerResistanceIcon4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.upperResistanceIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperFanOnIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.upperFanOffIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lowerFanOffIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lowerFanOnIcon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.upperFanIcon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowerFanIcon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.finishIndicator)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).EndInit();
@@ -673,7 +794,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label controlTemperatureLabel;
-        private System.IO.Ports.SerialPort arduinoPort;
+        private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Button pauseButton;
         private System.Windows.Forms.PictureBox runningIndicator;
@@ -684,32 +805,42 @@
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button sendDataButton;
+        private System.Windows.Forms.Label label6;
         public System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Timer timer1;
         public System.Windows.Forms.Label label11;
         public System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label8;
         public System.Windows.Forms.DataVisualization.Charting.Chart temperatureChart;
-        private System.Windows.Forms.Button intelButton;
+        private System.Windows.Forms.Button button9;
         private System.Windows.Forms.TextBox textBox6;
         public System.Windows.Forms.Label label9;
         public System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button xBoxButton;
-        private System.Windows.Forms.Button otherChipButton;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Label lowerProbeTemperature;
         private System.Windows.Forms.Label upperProbeTemperature;
         private System.Windows.Forms.PictureBox lowerResistanceIcon4;
+        private System.Windows.Forms.Label lowerResistanceLabel1;
+        private System.Windows.Forms.Label lowerResistanceLabel2;
         public System.Windows.Forms.PictureBox lowerResistanceIcon1;
         public System.Windows.Forms.PictureBox lowerResistanceIcon2;
+        private System.Windows.Forms.Label lowerResistanceLabel3;
+        private System.Windows.Forms.Label lowerResistanceLabel4;
+        private System.Windows.Forms.Label upperResistanceLabel;
         public System.Windows.Forms.PictureBox lowerResistanceIcon3;
         public System.Windows.Forms.PictureBox upperResistanceIcon;
+        private System.Windows.Forms.Label upperFanLabel;
         public System.Windows.Forms.Button stopButton;
-        public System.Windows.Forms.PictureBox upperFanOnIcon;
-        public System.Windows.Forms.PictureBox upperFanOffIcon;
-        public System.Windows.Forms.PictureBox lowerFanOffIcon;
-        public System.Windows.Forms.PictureBox lowerFanOnIcon;
-        private System.Windows.Forms.Label idkWhatThisIsLabel1;
-        private System.Windows.Forms.Label idkWhatThisIsLabel2;
+        public System.Windows.Forms.PictureBox pictureBox8;
+        public System.Windows.Forms.PictureBox upperFanIcon;
+        public System.Windows.Forms.PictureBox pictureBox12;
+        public System.Windows.Forms.PictureBox lowerFanIcon;
+        private System.Windows.Forms.Label lowerFanLabel;
+        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        public System.Windows.Forms.PictureBox finishIndicator;
         public System.Windows.Forms.PictureBox pictureBox13;
         public System.Windows.Forms.PictureBox pictureBox14;
         public System.Windows.Forms.PictureBox pictureBox15;

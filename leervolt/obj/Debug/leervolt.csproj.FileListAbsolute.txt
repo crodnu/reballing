@@ -32,39 +32,3 @@ C:\Users\User\documents\visual studio 2015\Projects\leervolt\leervolt\bin\Debug\
 C:\Users\User\documents\visual studio 2015\Projects\leervolt\leervolt\obj\Debug\leervolt.Curva1.resources
 C:\Users\User\documents\visual studio 2015\Projects\leervolt\leervolt\obj\Debug\leervolt.Curva2.resources
 C:\Users\User\documents\visual studio 2015\Projects\leervolt\leervolt\obj\Debug\leervolt.Curva3.resources
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\leervolt.exe.config
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\leervolt.exe
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\leervolt.pdb
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\ArduinoDriver.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\ArduinoSerialControllerClient.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\ArduinoSerialControllerClient.Tests.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\ArduinoUploader.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\DetectPort.exe
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\duinocom-i.exe
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\duinocom-ls.exe
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\duinocom.core.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\duinocom.exe
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\Duinocom.Tests.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\duinocom.Upload.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\duinocom.Upload.Tests.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\IntelHexFormatReader.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\NLog.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\nunit.framework.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\RJCP.SerialPortStream.dll
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\ArduinoSerialControllerClient.pdb
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\ArduinoSerialControllerClient.Tests.pdb
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\duinocom.core.pdb
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\NLog.xml
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\RJCP.SerialPortStream.pdb
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\bin\Debug\RJCP.SerialPortStream.xml
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.csprojAssemblyReference.cache
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.Curva1.resources
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.Curva2.resources
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.Curva3.resources
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.Form1.resources
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.Properties.Resources.resources
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.csproj.GenerateResource.cache
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.csproj.CoreCompileInputs.cache
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.csproj.CopyComplete
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.exe
-C:\Users\Eduardo Gonzalez\Documents\reballing\nuevo\leervolt\leervolt\obj\Debug\leervolt.pdb
