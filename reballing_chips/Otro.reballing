@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ChipConfiguratonData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Otro</Name>
+  <DamageTemperarure>850</DamageTemperarure>
+  <InitialTargetTemperature>150</InitialTargetTemperature>
+  <FirstPlateauTemperature>300</FirstPlateauTemperature>
+  <SecondPlateauTemperature>750</SecondPlateauTemperature>
+  <FirstPlateauDuration>350</FirstPlateauDuration>
+  <SecondPlateauDuration>350</SecondPlateauDuration>
+</ChipConfiguratonData>

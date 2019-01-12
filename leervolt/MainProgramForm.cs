@@ -6,15 +6,8 @@ using System.Windows.Forms;
 namespace leervolt
 {
 
-public partial class Form1 : Form
+public partial class MainProgramForm : Form
 {
-    string temp1;
-    string temp2;
-    string temp3;
-    string temp4;
-    string tiempo1;
-    string tiempo2;
-
     private bool IsPaused = false;
     private bool HasStartedReballing = false;
     private double rt = 0;
@@ -29,11 +22,10 @@ public partial class Form1 : Form
     private bool LowerFanIsTurnedOn;
     private readonly bool[] LowerResistancesAreTurnedOn = new bool[4];
     private bool UpperResistanceIsTurnedOn;
-    private int IdkWhatThisIs1;
-    private int IdkWhatThisIs2;
 
-    //bool OnOff1;
-    public Form1()
+    private ChipConfiguratonData chipConfiguratonData;
+
+    public MainProgramForm()
     {
         InitializeComponent();
         string[] puertos = SerialPort.GetPortNames();
@@ -85,13 +77,8 @@ public partial class Form1 : Form
 
         UpperResistanceIsTurnedOn = arr[7] == "1";
 
-        // arr[8] unused
-
-        UpperFanIsTurnedOn = arr[9] == "0";
-        LowerFanIsTurnedOn = arr[10] == "0";
-
-        IdkWhatThisIs1 = Int32.Parse(arr[11]);
-        IdkWhatThisIs2 = Int32.Parse(arr[12]);
+        UpperFanIsTurnedOn = arr[8] == "0";
+        LowerFanIsTurnedOn = arr[9] == "0";
 
         // arr[13] unused
     }
@@ -117,9 +104,6 @@ public partial class Form1 : Form
         controlTemperatureLabel.Text = ControlTemperatureStr + "°C";
         lowerProbeTemperature.Text = LowerProbeTemperatureStr + "°C";
         upperProbeTemperature.Text = UpperProbeTemperatureStr + "°C";
-
-        idkWhatThisIsLabel1.Text = IdkWhatThisIs1.ToString();
-        idkWhatThisIsLabel2.Text = IdkWhatThisIs2.ToString();
     }
 
     private void arduinoPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -162,30 +146,18 @@ public partial class Form1 : Form
 
     private void sendDataButton_Click(object sender, EventArgs e)
     {
-        //serialPort1.Write("Temperaturas[]");
-        // textBox1.Text = Curba1.textBox1.Text;
-        temp1 = "0" + textBox1.Text;
-        temp2 = "0" + textBox2.Text;
-        temp3 = "0" + textBox3.Text;
-        temp4 = "0" + textBox4.Text;
-        tiempo1 = textBox5.Text;
-        tiempo2 = textBox6.Text;
-        arduinoPort.Write(temp1);
-        arduinoPort.Write(",");
-        arduinoPort.Write(temp2);
-        arduinoPort.Write(",");
-        arduinoPort.Write(temp3);
-        arduinoPort.Write(",");
-        arduinoPort.Write(temp4);
-        arduinoPort.Write(",");
-        arduinoPort.Write(tiempo1);
-        arduinoPort.Write(",");
-        arduinoPort.Write(tiempo2);
-        
-        startButton.Visible = true;
-        pauseButton.Visible = true;
-        stopButton.Visible = true;
-        sendDataButton.Visible = false;
+        string messageToSend = 
+            chipConfiguratonData.InitialTargetTemperature + ","
+            + chipConfiguratonData.FirstPlateauTemperature + ","
+            + chipConfiguratonData.SecondPlateauTemperature + ","
+            + chipConfiguratonData.DamageTemperarure + ","
+            + chipConfiguratonData.FirstPlateauDuration + ","
+            + chipConfiguratonData.SecondPlateauDuration + ",";
+
+        arduinoPort.Write(messageToSend);
+
+        ReballingButtonsControl.Enabled = true;
+        sendDataButton.Hide();
     }
 
     private void timer_Tick(object sender, EventArgs e)
@@ -193,57 +165,14 @@ public partial class Form1 : Form
         rt += timer.Interval / 1000.0;
     }
 
-    private void intelButton_Click(object sender, EventArgs e)
+    private void selectChipButton_Click(object sender, EventArgs e)
     {
-        Curva1 Curva1 = new Curva1();
-        DialogResult res = Curva1.ShowDialog();
+        SelectChipDialog selectChipDialog = new SelectChipDialog();
+        DialogResult res = selectChipDialog.ShowDialog();
         if (res == DialogResult.OK)
         {
-            textBox1.Text = Curva1.temp11;
-            textBox2.Text = Curva1.temp12;
-            textBox3.Text = Curva1.temp13;
-            textBox4.Text = Curva1.temp14;
-            textBox5.Text = Curva1.tiempo11;
-            textBox6.Text = Curva1.tiempo12;
+            chipConfiguratonData = selectChipDialog.data;
             portComboBox.Visible = true;
-            xBoxButton.Visible = false;
-            otherChipButton.Visible = false;
-        }
-    }
-
-    private void xBoxButton_Click(object sender, EventArgs e)
-    {
-        Curva2 Curva2 = new Curva2();
-        DialogResult res = Curva2.ShowDialog();
-        if (res == DialogResult.OK)
-        {
-            textBox1.Text = Curva2.temp11;
-            textBox2.Text = Curva2.temp12;
-            textBox3.Text = Curva2.temp13;
-            textBox4.Text = Curva2.temp14;
-            textBox5.Text = Curva2.tiempo11;
-            textBox6.Text = Curva2.tiempo12;
-            portComboBox.Visible = true;
-            intelButton.Visible = false;
-            otherChipButton.Visible = false;
-        }
-    }
-
-    private void otherChipButton_Click(object sender, EventArgs e)
-    {
-        Curva3 Curva3 = new Curva3();
-        DialogResult res = Curva3.ShowDialog();
-        if (res == DialogResult.OK)
-        {
-            textBox1.Text = Curva3.temp11;
-            textBox2.Text = Curva3.temp12;
-            textBox3.Text = Curva3.temp13;
-            textBox4.Text = Curva3.temp14;
-            textBox5.Text = Curva3.tiempo11;
-            textBox6.Text = Curva3.tiempo12;
-            portComboBox.Visible = true;
-            xBoxButton.Visible = false;
-            intelButton.Visible = false;
         }
     }
 
@@ -256,28 +185,6 @@ public partial class Form1 : Form
         HasStartedReballing = false;
         exitButton.Visible = true;
     }
-
-    /*
-    private void button6_Click(object sender, EventArgs e)
-    {
-        arduinoPort.DataReceived += new SerialDataReceivedEventHandler(Recepcion);
-    }
-
-    private void button7_Click(object sender, EventArgs e)
-    {
-        arduinoPort.WriteLine("075");
-    }
-
-    private void button8_Click(object sender, EventArgs e)
-    {
-        arduinoPort.WriteLine("085");
-    }
-
-    private void form1_load(object sender, EventArgs e)
-    {
-        timer.Start();
-    }
-    */
 }
 
 }

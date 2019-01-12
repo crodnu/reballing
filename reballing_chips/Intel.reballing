@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ChipConfiguratonData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Intel</Name>
+  <DamageTemperarure>165</DamageTemperarure>
+  <InitialTargetTemperature>120</InitialTargetTemperature>
+  <FirstPlateauTemperature>140</FirstPlateauTemperature>
+  <SecondPlateauTemperature>165</SecondPlateauTemperature>
+  <FirstPlateauDuration>0222</FirstPlateauDuration>
+  <SecondPlateauDuration>0555</SecondPlateauDuration>
+</ChipConfiguratonData>

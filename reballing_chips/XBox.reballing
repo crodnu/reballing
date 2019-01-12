@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ChipConfiguratonData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>XBox</Name>
+  <DamageTemperarure>300</DamageTemperarure>
+  <InitialTargetTemperature>155</InitialTargetTemperature>
+  <FirstPlateauTemperature>180</FirstPlateauTemperature>
+  <SecondPlateauTemperature>230</SecondPlateauTemperature>
+  <FirstPlateauDuration>222</FirstPlateauDuration>
+  <SecondPlateauDuration>555</SecondPlateauDuration>
+</ChipConfiguratonData>
