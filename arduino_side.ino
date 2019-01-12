@@ -153,8 +153,6 @@ void sendDataToComputer() {
     Serial.print("|");
     Serial.print(R51);
     Serial.print("|");
-    Serial.print(R61);
-    Serial.print("|");
     Serial.print(V11);
     Serial.print("|");
     Serial.print(V21);
@@ -167,7 +165,23 @@ void sendDataToComputer() {
     Serial.println("");
 }
 
-readDataFromReballingMachine() {
+void readDataFromPins() {
+    T1 =String(ktc.readCelsius());
+    T2 =String(ktc2.readCelsius()); 
+    T3 =String(ktc3.readCelsius());
+    R11=digitalRead(R1);
+    R21=digitalRead(R2);
+    R31=digitalRead(R3);
+    R41=digitalRead(R4);
+    R51=digitalRead(R5);
+    V11=digitalRead(V1);
+    V21=digitalRead(V2);
+
+    T11= ktc.readCelsius();
+    T21= ktc2.readCelsius();
+}
+
+void readDataFromReballingMachine() {
     while (Serial.available()) {
         delay(3); /*delay to allow buffer to fill*/
         if (Serial.available( )) {
@@ -234,7 +248,6 @@ void setup() {
     pinMode(R3,OUTPUT);
     pinMode(R4,OUTPUT);
     pinMode(R5,OUTPUT);
-    pinMode(R6,OUTPUT);
     pinMode(V1,OUTPUT);
     pinMode(V2,OUTPUT);
     
@@ -253,20 +266,7 @@ void loop() {
             turnAllFansOff();
         }
 
-        T1 =String(ktc.readCelsius());
-        T2 =String(ktc2.readCelsius()); 
-        T3 =String(ktc3.readCelsius());
-        R11=digitalRead(R1);
-        R21=digitalRead(R2);
-        R31=digitalRead(R3);
-        R41=digitalRead(R4);
-        R51=digitalRead(R5);
-        R61=digitalRead(R6);
-        V11=digitalRead(V1);
-        V21=digitalRead(V2);
-
-        T11= ktc.readCelsius();
-        T21= ktc2.readCelsius();
+        readDataFromPins();
         paso1 = false;
 
         delay(1000);
