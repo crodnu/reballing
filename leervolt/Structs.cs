@@ -6,12 +6,12 @@ namespace leervolt
 public struct ChipConfiguratonData
 {
     public string Name;
-    public string DamageTemperarure;
-    public string InitialTargetTemperature;
-    public string FirstPlateauTemperature;
-    public string SecondPlateauTemperature;
-    public string FirstPlateauDuration;
-    public string SecondPlateauDuration;
+    public int DamageTemperarure;
+    public int InitialTargetTemperature;
+    public int FirstPlateauTemperature;
+    public int SecondPlateauTemperature;
+    public int FirstPlateauDuration;
+    public int SecondPlateauDuration;
 }
 
 public struct ReballingStatusData

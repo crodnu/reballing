@@ -206,7 +206,7 @@
             series1.YValuesPerPoint = 3;
             series2.BorderWidth = 4;
             series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series2.Color = System.Drawing.Color.Green;
             series2.Legend = "Legend1";
             series2.Name = "Sonda de abajo";

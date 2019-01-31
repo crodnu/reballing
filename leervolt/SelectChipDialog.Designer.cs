@@ -1,4 +1,6 @@
-﻿namespace leervolt
+﻿using System.Drawing;
+
+namespace leervolt
 {
     partial class SelectChipDialog
     {
@@ -28,13 +30,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectChipDialog));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.acceptButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.initialTemperatureTextbox = new System.Windows.Forms.TextBox();
             this.firstPlateauTemperatureTextbox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.secondPlateauTemperatureTextbox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.damageTemperatureTextbox = new System.Windows.Forms.TextBox();
@@ -48,8 +52,9 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chipNameTextbox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.chipTemperatureGraph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chipTemperatureGraph)).BeginInit();
             this.SuspendLayout();
             // 
             // acceptButton
@@ -102,16 +107,6 @@
             this.label2.Size = new System.Drawing.Size(56, 16);
             this.label2.TabIndex = 3;
             this.label2.Text = "Temp2";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(50, 4);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(847, 476);
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
             // 
             // secondPlateauTemperatureTextbox
             // 
@@ -253,22 +248,47 @@
             this.label7.TabIndex = 17;
             this.label7.Text = "Nombre";
             // 
+            // chipTemperatureGraph
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chipTemperatureGraph.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chipTemperatureGraph.Legends.Add(legend1);
+            this.chipTemperatureGraph.Location = new System.Drawing.Point(48, 31);
+            this.chipTemperatureGraph.Name = "chipTemperatureGraph";
+            series1.BorderWidth = 5;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Temperatura";
+            series2.BorderWidth = 5;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Color = System.Drawing.Color.Red;
+            series2.Legend = "Legend1";
+            series2.Name = "Temperatura de daño";
+            this.chipTemperatureGraph.Series.Add(series1);
+            this.chipTemperatureGraph.Series.Add(series2);
+            this.chipTemperatureGraph.Size = new System.Drawing.Size(795, 451);
+            this.chipTemperatureGraph.TabIndex = 17;
+            this.chipTemperatureGraph.Text = "chart1";
+            // 
             // SelectChipDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(931, 620);
             this.ControlBox = false;
+            this.Controls.Add(this.chipTemperatureGraph);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.chipSelectionComboBox);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.acceptButton);
             this.Name = "SelectChipDialog";
             this.Text = "SelectChipDialog";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chipTemperatureGraph)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -280,7 +300,6 @@
         private System.Windows.Forms.TextBox initialTemperatureTextbox;
         private System.Windows.Forms.TextBox firstPlateauTemperatureTextbox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox secondPlateauTemperatureTextbox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox damageTemperatureTextbox;
@@ -294,5 +313,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox chipNameTextbox;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chipTemperatureGraph;
     }
 }
