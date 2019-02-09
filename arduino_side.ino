@@ -1,82 +1,92 @@
 #include <MAX6675_Thermocouple.h>
 #define DEBUG(a) Serial.println(a);
 
-int periodo = 5000;
-int periodo1 = 500;
-int periodo2 = 500;
-byte dato;
-bool paso;
-bool paso1;
-bool paso2;
-byte paso3 = 1;
-byte paso5 = 1;
+#define CONTROL_THERMOCOUPLE_SO_PIN 5
+#define CONTROL_THERMOCOUPLE_CS_PIN 6
+#define CONTROL_THERMOCOUPLE_SCK_PIN 7
+
+#define LOWER_THERMOCOUPLE_SO_PIN 8
+#define LOWER_THERMOCOUPLE_CS_PIN 9
+#define LOWER_THERMOCOUPLE_SCK_PIN 10
+
+#define UPPER_THERMOCOUPLE_SO_PIN 11
+#define UPPER_THERMOCOUPLE_CS_PIN 12
+#define UPPER_THERMOCOUPLE_SCK_PIN 13
+
+#define SERIAL_DATA_RATE 9600
+
+#define R1 22
+#define R2 23
+#define R3 24
+#define R4 25
+#define R5 26
+#define R6 27
+#define V1 28
+#define V2 29
+
+#define START_BUTTON_PRESSED 7
+#define STOP_BUTTON_PRESSED 8
+#define PAUSE_BUTTON_PRESSED 9
+
+#define PAUSE_FAN_DURATION 5000
+#define UPDATE_DELAY_DURATION 500
+
+// Should this be measured at the beggining?
+#define ROOM_TEMPERATURE 25
+
+enum class State {
+    NOT_STARTED,
+    PAUSED_FANS_ON,
+    PAUSED_FANS_OFF,
+    PREHEAT,
+    SOAK,
+    REFLOW,
+    COOLING,
+    FINISHED
+}
+
+struct ChipConfigurationData {
+    bool isValid = false;
+    int damageTemperarure;
+    int initialTargetTemperature; // Not needed?
+    int soakTemperature;
+    int reflowTemperature;
+    int preheatDuration;
+    int soakDuration;
+    int reflowDuration;
+    int coolingDuration;
+};
+
+struct PinData {
+    bool upperFanIsTurnedOn;
+    bool lowerFanIsTurnedOn;
+    bool lowerResistancesAreTurnedOn[4];
+    bool upperResistanceIsTurnedOn;
+    
+    int controlTemperature;
+    int lowerProbeTemperature;
+    int upperProbeTemperature;
+}
+
+State pausedState = State::NOT_STARTED; // Stores the old state of the machine when it's paused.
+State currentState = State::NOT_STARTED;
+ChipConfigurationData chipConfigurationData;
+unsigned long pauseStartTime = 0;
+unsigned long currentStateStartTime = 0;
+
 byte paso6 = 0;
 byte paso4 = 0;
 byte paso7 = 1;
 byte paso8 = 0;
 byte paso9 = 1;
 byte paso10 = 0;
-byte paso11 = 1;
-byte paso12 = 0;
-unsigned long tiempoAnterior = 0;
+//unsigned long tiempoAnterior = 0;
 unsigned long tiempoAnterior1 = 0;//guarda tiempo de referencia para comparar
 unsigned long tiempoAnterior2 = 0;//guarda tiempo de referencia para comparar
-int i;
-int PosicionComa;
-int LargoMens;
-String Mensaje;
-int estado;
-int estado1;
-String readString;
-String T1;
-String T2;
-String T3;
-int T11;
-int T21;
-int T31;
 
-String temp1;
-String temp2;
-String temp3;
-String temp4;
-String tiempo1;
-String tiempo2;
-int temper1;
-int temper2;
-int temper3;
-int temper4;
-int tiempo11;
-int tiempo12;
-int ktcDO = 5;   // SO
-int ktcCS = 6;   // CS
-int ktcCLK = 7;  // SCK
-int ktc2DO = 8;   // SO
-int ktc2CS = 9;   // CS
-int ktc2CLK = 10;  // SCK
-int ktc3DO = 11;   // SO
-int ktc3CS = 12;   // CS
-int ktc3CLK = 13;  // SCK
-
-int R1 = 22;
-int R2 = 23;
-int R3 = 24;
-int R4 = 25;
-int R5 = 26;
-int R6 = 27;
-int V1 = 28;
-int V2 = 29;
-String R11;
-String R21;
-String R31;
-String R41;
-String R51;
-String R61;
-String V11;
-String V21;
-
-MAX6675_Thermocouple ktc(ktcCLK, ktcCS, ktcDO);
-MAX6675_Thermocouple ktc2(ktc2CLK, ktc2CS, ktc2DO);
-MAX6675_Thermocouple ktc3(ktc3CLK, ktc3CS, ktc3DO);
+MAX6675_Thermocouple controlThermocouple(CONTROL_THERMOCOUPLE_SCK_PIN, CONTROL_THERMOCOUPLE_CS_PIN, CONTROL_THERMOCOUPLE_SO_PIN);
+MAX6675_Thermocouple lowerThermocouple(LOWER_THERMOCOUPLE_SCK_PIN, LOWER_THERMOCOUPLE_CS_PIN, LOWER_THERMOCOUPLE_SO_PIN);
+MAX6675_Thermocouple upperThermocouple(UPPER_THERMOCOUPLE_SCK_PIN, UPPER_THERMOCOUPLE_CS_PIN, UPPER_THERMOCOUPLE_SO_PIN);
 
 void turnFanOn(int fanPort) {
     digitalWrite(resistancePort, fanPort);
@@ -136,220 +146,216 @@ void turnAllResistancesOff() {
     turnAllUpperResistancesOff();
 }
 
-void sendDataToComputer() {
-    Serial.print(T1);
+void sendDataToComputer(const PinData& data) {
+    Serial.print(data.controlTemperature);
     Serial.print("|");
-    Serial.print(T2);
+    Serial.print(data.lowerProbeTemperature);
     Serial.print("|");
-    Serial.print(T3);
+    Serial.print(data.upperProbeTemperature);
     Serial.print("|");
-    Serial.print(R11);
+    Serial.print(data.lowerResistancesAreTurnedOn[0], DEC);
     Serial.print("|");
-    Serial.print(R21);
+    Serial.print(data.lowerResistancesAreTurnedOn[1], DEC);
     Serial.print("|");
-    Serial.print(R31);
+    Serial.print(data.lowerResistancesAreTurnedOn[2], DEC);
     Serial.print("|");
-    Serial.print(R41);
+    Serial.print(data.lowerResistancesAreTurnedOn[3], DEC);
     Serial.print("|");
-    Serial.print(R51);
+    Serial.print(data.upperResistanceIsTurnedOn, DEC);
     Serial.print("|");
-    Serial.print(V11);
+    Serial.print(data.upperFanIsTurnedOn, DEC);
     Serial.print("|");
-    Serial.print(V21);
-    Serial.print("|");
-    Serial.print(tiempo11);
-    Serial.print("|");
-    Serial.print(tiempo12);
-    Serial.print("|");
-    Serial.print("00");
-    Serial.println("");
+    Serial.print(data.lowerFanIsTurnedOn, DEC);
+    Serial.println("|00");
 }
 
-void readDataFromPins() {
-    T1 =String(ktc.readCelsius());
-    T2 =String(ktc2.readCelsius()); 
-    T3 =String(ktc3.readCelsius());
-    R11=digitalRead(R1);
-    R21=digitalRead(R2);
-    R31=digitalRead(R3);
-    R41=digitalRead(R4);
-    R51=digitalRead(R5);
-    V11=digitalRead(V1);
-    V21=digitalRead(V2);
-
-    T11= ktc.readCelsius();
-    T21= ktc2.readCelsius();
+PinData readDataFromPins() {
+    PinData data;
+    
+    data.upperFanIsTurnedOn = digitalRead(V1);
+    data.lowerFanIsTurnedOn = digitalRead(V2);
+    data.lowerResistancesAreTurnedOn[0] = digitalRead(R1);
+    data.lowerResistancesAreTurnedOn[1] = digitalRead(R2);
+    data.lowerResistancesAreTurnedOn[2] = digitalRead(R3);
+    data.lowerResistancesAreTurnedOn[3] = digitalRead(R4);
+    data.upperResistanceIsTurnedOn = digitalRead(R5);
+    
+    data.controlTemperature = controlThermocouple.readCelsius();
+    data.lowerProbeTemperature = lowerThermocouple.readCelsius();
+    data.upperProbeTemperature = upperThermocouple.readCelsius();
+    
+    return data;
 }
 
-void readDataFromReballingMachine() {
+String readStringFromPC() {
+    String result = "";
+    
     while (Serial.available()) {
         delay(3); /*delay to allow buffer to fill*/
         if (Serial.available( )) {
             char c = Serial.read(); /*gets one byte from serial buffer*/
-            readString += c; /*makes the string readString*/
+            result += c; /*makes the string result*/
         }
     }
     
-    if (readString.length() > 0) {
-        estado1 = Serial.read();
-        int estado2 = readString.toInt();
+    return result;
+}
 
-        Mensaje = readString;
+void pauseReballing() {
+    pausedState = currentState;
+    pauseStartTime = millis();
+    currentState = State::PAUSED_FANS_ON;
+}
 
-        readString = "";
+void unpauseReballing() {
+    currentState = pausedState;
+    currentStateStartTime += millis() - pauseStartTime; // Hacky way to get the time to resume normally.
+    pauseStartTime = 0;
+}
 
-        if (estado2 == 7) {
-            paso = true;
-            paso2 = false;
-            paso3 = 1;
-        } else if (estado2 == 8) {
-            paso = false;
-            paso2 = false;
-        } else if (estado2 == 9) {
-            paso2= true;
+void readDataFromPC() {
+    String message = readStringFromPC();
+    
+    if (message.length() > 0) {
+        Serial.read(); // Needed?
+        int messageFromPC = message.toInt();
+
+        if (messageFromPC == START_BUTTON_PRESSED) {
+            if(currentState == State::NOT_STARTED) {
+                currentState == State::PREHEAT;
+                currentStateStartTime = millis();
+            }
+            else unpauseReballing();
+        } else if (messageFromPC == STOP_BUTTON_PRESSED) {
+            currentState = State::FINISHED;
+        } else if (messageFromPC == PAUSE_BUTTON_PRESSED) {
+            pauseReballing();
         }
 
-        PosicionComa = Mensaje.indexOf (',');
-        LargoMens = Mensaje.length();
+        int commaPosition = message.indexOf (',');
 
-        if (PosicionComa != -1) {
-            temp1 = (Mensaje.substring(0,PosicionComa));
-            Mensaje = Mensaje.substring(PosicionComa+1, Mensaje.length());
-            temp2 = (Mensaje.substring(0,PosicionComa));
-            Mensaje = Mensaje.substring(PosicionComa+1, Mensaje.length());
-            temp3 = (Mensaje.substring(0,PosicionComa));
-            Mensaje = Mensaje.substring(PosicionComa+1, Mensaje.length());
-            temp4 = (Mensaje.substring(0,PosicionComa));
-            Mensaje = Mensaje.substring(PosicionComa+1, Mensaje.length());
-            tiempo1 = (Mensaje.substring(0,PosicionComa));
-            Mensaje = Mensaje.substring(PosicionComa+1, Mensaje.length());
-            tiempo2 = (Mensaje.substring(0,PosicionComa));
+        if (commaPosition != -1) { // TODO: see if there's a better way to do this.
+            String temp1 = (message.substring(0,commaPosition));
+            message = message.substring(commaPosition+1, message.length());
+            String temp2 = (message.substring(0,commaPosition));
+            message = message.substring(commaPosition+1, message.length());
+            String temp3 = (message.substring(0,commaPosition));
+            message = message.substring(commaPosition+1, message.length());
+            String temp4 = (message.substring(0,commaPosition));
+            message = message.substring(commaPosition+1, message.length());
+            String tiempo1 = (message.substring(0,commaPosition));
+            message = message.substring(commaPosition+1, message.length());
+            String tiempo2 = (message.substring(0,commaPosition));
         }
 
-        temper1= temp1.toInt();  
-        temper2= temp2.toInt(); 
-        temper3= temp3.toInt(); 
-        temper4= temp4.toInt();
-        tiempo11= tiempo1.toInt();
-        tiempo12= tiempo2.toInt();
+        chipConfigurationData.damageTemperarure = temp4.toInt();
+        chipConfigurationData.soakTemperature = temp2.toInt();
+        chipConfigurationData.reflowTemperature = temp3.toInt();
+        chipConfigurationData.preheatDuration = 1000; // TODO
+        chipConfigurationData.soakDuration = tiempo1.toInt();
+        chipConfigurationData.reflowDuration = tiempo2.toInt();
+        chipConfigurationData.coolingDuration = 1000; // TODO
+        chipConfigurationData.isValid = true;
     }
 }
 
+double getStatePercentage(int startTime, int stateDuration) {
+    return (millis() - startTime) / stateDuration;
+}
+
+int getStateTemperature(int startTime, int stateDuration, int initialTemperature, int finalTemperature) {
+    double statePercentage = getStatePercentage(startTime, stateDuration);
+    return (int) statePercentage * finalTemperature + (1 - statePercentage) * initialTemperature;
+}
+
+void doNormalStateUpdate(int initialTemperature, int finalTemperature, int stateDuration, State nextState) {
+    int targetTemperature = getStateTemperature(currentStateStartTime, stateDuration, initialTemperature, finalTemperature);
+    
+    if(pinData.controlTemperature < targetTemperature) {
+        turnAllFansOff();
+        turnAllResistancesOn();
+    } else {
+        turnAllFansOn();
+        turnAllResistancesOff();
+    }
+    
+    if(pinData.controlTemperature > chipConfigurationData.damageTemperarure) {
+        turnAllFansOn();
+        turnAllResistancesOff();
+    }
+    
+    if(millis() > currentStateStartTime + stateDuration) {
+        currentState = State::SOAK;
+        currentStateStartTime = millis();
+    }
+    
+    sendDataToComputer(pinData);
+}
+
 void setup() {
-    // put your setup code here, to run once:
-    Serial.begin(9600);
-    delay (100);
-    paso = false;
-    paso1 = true;
-    paso2 = false;
-    paso5 = 1;
-    pinMode(R1,OUTPUT);
-    pinMode(R2,OUTPUT);
-    pinMode(R3,OUTPUT);
-    pinMode(R4,OUTPUT);
-    pinMode(R5,OUTPUT);
-    pinMode(V1,OUTPUT);
-    pinMode(V2,OUTPUT);
+    Serial.begin(SERIAL_DATA_RATE);
+    delay(100);
+    
+    pinMode(R1, OUTPUT);
+    pinMode(R2, OUTPUT);
+    pinMode(R3, OUTPUT);
+    pinMode(R4, OUTPUT);
+    pinMode(R5, OUTPUT);
+    pinMode(V1, OUTPUT);
+    pinMode(V2, OUTPUT);
     
     turnAllResistancesOff();
     turnAllFansOff();
 }
 
 void loop() {
-    // put your main code here, to run repeatedly:
-    // estado = Serial.read();
-  
-    if (paso == true){
-        //Arranque de resistencias
-        if (paso1 == true){ //para poder apagar las resistencias
+    const PinData pinData = readDataFromPins();
+
+    switch(currentState) {
+        case State::NOT_STARTED: {
+            break;
+        }
+        
+        case State::PAUSED_FANS_ON: {
+            turnAllResistancesOff();
+            turnAllFansOn();
+            if(millis() > pauseStartTime + PAUSE_FAN_DURATION) currentState = State::PAUSED_FANS_OFF;
+            sendDataToComputer(pinData);
+            break;
+        }
+        
+        case State::PAUSED_FANS_OFF: {
+            turnAllFansOff();
+            sendDataToComputer(pinData);
+            break;
+        }
+        
+        case State::PREHEAT: {
+            doNormalStateUpdate(ROOM_TEMPERATURE, chipConfigurationData.soakTemperature, chipConfigurationData.preheatDuration, State::SOAK);
+            break;
+        }
+        
+        case State::SOAK: {
+            doNormalStateUpdate(chipConfigurationData.soakTemperature, chipConfigurationData.soakTemperature, chipConfigurationData.soakDuration, State::SOAK);
+            break;
+        }
+        
+        case State::REFLOW: {
+            doNormalStateUpdate(chipConfigurationData.reflowTemperature, chipConfigurationData.reflowTemperature, chipConfigurationData.reflowDuration, State::SOAK);
+            break;
+        }
+        
+        case State::COOLING: {
+            doNormalStateUpdate(chipConfigurationData.reflowTemperature, ROOM_TEMPERATURE, chipConfigurationData.coolingDuration, State::SOAK);
+            break;
+        }
+        
+        case State::FINISHED: {
             turnAllResistancesOff();
             turnAllFansOff();
         }
-
-        readDataFromPins();
-        paso1 = false;
-
-        delay(1000);
-        
-        if (T11>(temper1-2)){
-            turnAllResistancesOff();
-            paso5=0; // Primer paso en temp
-        }
-    
-        if (T11<temper1){
-            turnAllResistancesOn();
-        }
-        
-        if (T11<(temper2+1) && paso5==0){
-            turnResistanceOff(R1);
-            turnResistanceOff(R4);
-            turnResistanceOn(R2);
-            turnResistanceOn(R3);
-            turnAllUpperResistancesOn();
-        }
-        
-        //  if (temper3< T11 >(temper2+1)){ //Tiempo Pausa tiempo11
-        if ((T11>temper2)&&paso7 == 1){
-            periodo1 = tiempo11*50;
-            tiempoAnterior1 = millis();
-            paso8 = 1;   
-            turnAllUpperResistancesOff();
-            paso7 = 0;  //desactivo pausa  
-        }
-        
-        if((millis()>tiempoAnterior1+periodo1)&&paso8 == 1){  //si ha transcurrido el periodo programado
-            paso8 = 0;  //y desactivo el temporizador
-            tiempoAnterior1 = 0; 
-            paso6=1;  
-        }
-        
-        if (T11<(temper3+1)&& paso6 == 1){
-            turnAllUpperResistancesOn();
-            //paso6 = 0;
-        }
-        
-        //  if (temper4< T11 >(temper2+1)){ //Tiempo Pausa tiempo12
-        if ((T11>temper4)&&paso9 == 1){
-            periodo2 = tiempo12*50;
-            tiempoAnterior2 = millis();
-            paso10 = 1;
-            turnAllUpperResistancesOff();
-            paso9 = 0;  //desactivo pausa  
-        }
-        
-        if((millis()>tiempoAnterior2+periodo2)&&paso10 == 1){  //si ha transcurrido el periodo programado
-            paso10 = 0;  //y desactivo el temporizador
-            tiempoAnterior2 = 0; 
-            paso6=1;  
-        }
-        
-        //if (T11<(temper4+1)&& paso6 == 1){
-        // digitalWrite(R5,HIGH);
-        // digitalWrite(R6,HIGH);
-        // }
-     
-        sendDataToComputer();
-        
-        if (paso2 == true) {   //boton de pausa
-            turnAllResistancesOff();
-            //periodo = tiempo11*3;
-            if (paso3 == 1){
-                tiempoAnterior = millis();
-                paso4 = 1;     
-                turnAllFansOn();
-                paso3 = 0;  //desactivo pausa  
-            }
-            if((millis()>tiempoAnterior+periodo)&&paso4 == 1){  //si ha transcurrido el periodo programado
-                paso4 = 0;  //y desactivo el temporizador
-                tiempoAnterior = 0;
-                turnAllFansOff();
-                paso5=1;
-            }
-        }
-    } else {
-        delay (500);
-        turnAllResistancesOff();
     }
-
-    readDataFromReballingMachine();
+    
+    readDataFromPC();
+    delay(UPDATE_DELAY_DURATION);
 }
