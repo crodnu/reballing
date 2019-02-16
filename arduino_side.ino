@@ -21,8 +21,8 @@
 #define R4 25
 #define R5 26
 #define R6 27
-#define V1 28
-#define V2 29
+#define F1 28
+#define F2 29
 
 #define START_BUTTON_PRESSED 7
 #define STOP_BUTTON_PRESSED 8
@@ -43,7 +43,7 @@ enum class State {
     REFLOW,
     COOLING,
     FINISHED
-}
+};
 
 struct ChipConfigurationData {
     bool isValid = false;
@@ -66,7 +66,7 @@ struct PinData {
     int controlTemperature;
     int lowerProbeTemperature;
     int upperProbeTemperature;
-}
+};
 
 State pausedState = State::NOT_STARTED; // Stores the old state of the machine when it's paused.
 State currentState = State::NOT_STARTED;
@@ -74,26 +74,16 @@ ChipConfigurationData chipConfigurationData;
 unsigned long pauseStartTime = 0;
 unsigned long currentStateStartTime = 0;
 
-byte paso6 = 0;
-byte paso4 = 0;
-byte paso7 = 1;
-byte paso8 = 0;
-byte paso9 = 1;
-byte paso10 = 0;
-//unsigned long tiempoAnterior = 0;
-unsigned long tiempoAnterior1 = 0;//guarda tiempo de referencia para comparar
-unsigned long tiempoAnterior2 = 0;//guarda tiempo de referencia para comparar
-
 MAX6675_Thermocouple controlThermocouple(CONTROL_THERMOCOUPLE_SCK_PIN, CONTROL_THERMOCOUPLE_CS_PIN, CONTROL_THERMOCOUPLE_SO_PIN);
 MAX6675_Thermocouple lowerThermocouple(LOWER_THERMOCOUPLE_SCK_PIN, LOWER_THERMOCOUPLE_CS_PIN, LOWER_THERMOCOUPLE_SO_PIN);
 MAX6675_Thermocouple upperThermocouple(UPPER_THERMOCOUPLE_SCK_PIN, UPPER_THERMOCOUPLE_CS_PIN, UPPER_THERMOCOUPLE_SO_PIN);
 
 void turnFanOn(int fanPort) {
-    digitalWrite(resistancePort, fanPort);
+    digitalWrite(fanPort, LOW);
 }
 
 void turnFanOff(int fanPort) {
-    digitalWrite(resistancePort, fanPort);
+    digitalWrite(fanPort, HIGH);
 }
 
 void turnAllFansOn() {
@@ -146,34 +136,39 @@ void turnAllResistancesOff() {
     turnAllUpperResistancesOff();
 }
 
-void sendDataToComputer(const PinData& data) {
+int boolToBin(bool b) {
+  return b ? 1 : 0;
+}
+
+void sendDataToComputer(const PinData& data, int tt) {
     Serial.print(data.controlTemperature);
     Serial.print("|");
     Serial.print(data.lowerProbeTemperature);
     Serial.print("|");
-    Serial.print(data.upperProbeTemperature);
+    Serial.print(tt);
     Serial.print("|");
-    Serial.print(data.lowerResistancesAreTurnedOn[0], DEC);
+    Serial.print(boolToBin(data.lowerResistancesAreTurnedOn[0]));
     Serial.print("|");
-    Serial.print(data.lowerResistancesAreTurnedOn[1], DEC);
+    Serial.print(boolToBin(data.lowerResistancesAreTurnedOn[1]));
     Serial.print("|");
-    Serial.print(data.lowerResistancesAreTurnedOn[2], DEC);
+    Serial.print(boolToBin(data.lowerResistancesAreTurnedOn[2]));
     Serial.print("|");
-    Serial.print(data.lowerResistancesAreTurnedOn[3], DEC);
+    Serial.print(boolToBin(data.lowerResistancesAreTurnedOn[3]));
     Serial.print("|");
-    Serial.print(data.upperResistanceIsTurnedOn, DEC);
+    Serial.print(boolToBin(data.upperResistanceIsTurnedOn));
     Serial.print("|");
-    Serial.print(data.upperFanIsTurnedOn, DEC);
+    Serial.print(boolToBin(data.upperFanIsTurnedOn));
     Serial.print("|");
-    Serial.print(data.lowerFanIsTurnedOn, DEC);
-    Serial.println("|00");
+    Serial.print(boolToBin(data.lowerFanIsTurnedOn));
+    Serial.print("|00");
+    Serial.println("");
 }
 
 PinData readDataFromPins() {
     PinData data;
     
-    data.upperFanIsTurnedOn = digitalRead(V1);
-    data.lowerFanIsTurnedOn = digitalRead(V2);
+    data.upperFanIsTurnedOn = digitalRead(F1);
+    data.lowerFanIsTurnedOn = digitalRead(F2);
     data.lowerResistancesAreTurnedOn[0] = digitalRead(R1);
     data.lowerResistancesAreTurnedOn[1] = digitalRead(R2);
     data.lowerResistancesAreTurnedOn[2] = digitalRead(R3);
@@ -208,7 +203,7 @@ void pauseReballing() {
 }
 
 void unpauseReballing() {
-    currentState = pausedState;
+    currentState = State::PREHEAT;
     currentStateStartTime += millis() - pauseStartTime; // Hacky way to get the time to resume normally.
     pauseStartTime = 0;
 }
@@ -217,15 +212,16 @@ void readDataFromPC() {
     String message = readStringFromPC();
     
     if (message.length() > 0) {
-        Serial.read(); // Needed?
+        //Serial.read(); // Needed?
         int messageFromPC = message.toInt();
 
         if (messageFromPC == START_BUTTON_PRESSED) {
-            if(currentState == State::NOT_STARTED) {
-                currentState == State::PREHEAT;
+            if(currentState == State::PAUSED_FANS_ON || currentState == State::PAUSED_FANS_OFF) {
+                unpauseReballing();
+            } else {
+                currentState = State::PREHEAT;
                 currentStateStartTime = millis();
             }
-            else unpauseReballing();
         } else if (messageFromPC == STOP_BUTTON_PRESSED) {
             currentState = State::FINISHED;
         } else if (messageFromPC == PAUSE_BUTTON_PRESSED) {
@@ -246,29 +242,29 @@ void readDataFromPC() {
             String tiempo1 = (message.substring(0,commaPosition));
             message = message.substring(commaPosition+1, message.length());
             String tiempo2 = (message.substring(0,commaPosition));
-        }
 
-        chipConfigurationData.damageTemperarure = temp4.toInt();
-        chipConfigurationData.soakTemperature = temp2.toInt();
-        chipConfigurationData.reflowTemperature = temp3.toInt();
-        chipConfigurationData.preheatDuration = 1000; // TODO
-        chipConfigurationData.soakDuration = tiempo1.toInt();
-        chipConfigurationData.reflowDuration = tiempo2.toInt();
-        chipConfigurationData.coolingDuration = 1000; // TODO
-        chipConfigurationData.isValid = true;
+            chipConfigurationData.damageTemperarure = temp4.toInt();
+            chipConfigurationData.soakTemperature = temp2.toInt();
+            chipConfigurationData.reflowTemperature = temp3.toInt();
+            chipConfigurationData.preheatDuration = 180000; // TODO
+            chipConfigurationData.soakDuration = tiempo1.toInt();
+            chipConfigurationData.reflowDuration = tiempo2.toInt();
+            chipConfigurationData.coolingDuration = 10000; // TODO
+            chipConfigurationData.isValid = true;
+        }
     }
 }
 
 double getStatePercentage(int startTime, int stateDuration) {
-    return (millis() - startTime) / stateDuration;
+    return (double) (millis() - startTime) / stateDuration;
 }
 
 int getStateTemperature(int startTime, int stateDuration, int initialTemperature, int finalTemperature) {
     double statePercentage = getStatePercentage(startTime, stateDuration);
-    return (int) statePercentage * finalTemperature + (1 - statePercentage) * initialTemperature;
+    return (int) (statePercentage * finalTemperature + (1 - statePercentage) * initialTemperature);
 }
 
-void doNormalStateUpdate(int initialTemperature, int finalTemperature, int stateDuration, State nextState) {
+void doNormalStateUpdate(int initialTemperature, int finalTemperature, int stateDuration, State nextState, const PinData& pinData) {
     int targetTemperature = getStateTemperature(currentStateStartTime, stateDuration, initialTemperature, finalTemperature);
     
     if(pinData.controlTemperature < targetTemperature) {
@@ -285,11 +281,11 @@ void doNormalStateUpdate(int initialTemperature, int finalTemperature, int state
     }
     
     if(millis() > currentStateStartTime + stateDuration) {
-        currentState = State::SOAK;
+        currentState = nextState;
         currentStateStartTime = millis();
     }
     
-    sendDataToComputer(pinData);
+    sendDataToComputer(pinData, targetTemperature);
 }
 
 void setup() {
@@ -301,8 +297,8 @@ void setup() {
     pinMode(R3, OUTPUT);
     pinMode(R4, OUTPUT);
     pinMode(R5, OUTPUT);
-    pinMode(V1, OUTPUT);
-    pinMode(V2, OUTPUT);
+    pinMode(F1, OUTPUT);
+    pinMode(F2, OUTPUT);
     
     turnAllResistancesOff();
     turnAllFansOff();
@@ -320,33 +316,33 @@ void loop() {
             turnAllResistancesOff();
             turnAllFansOn();
             if(millis() > pauseStartTime + PAUSE_FAN_DURATION) currentState = State::PAUSED_FANS_OFF;
-            sendDataToComputer(pinData);
+            sendDataToComputer(pinData, 0);
             break;
         }
         
         case State::PAUSED_FANS_OFF: {
             turnAllFansOff();
-            sendDataToComputer(pinData);
+            sendDataToComputer(pinData, 0);
             break;
         }
         
         case State::PREHEAT: {
-            doNormalStateUpdate(ROOM_TEMPERATURE, chipConfigurationData.soakTemperature, chipConfigurationData.preheatDuration, State::SOAK);
+            doNormalStateUpdate(ROOM_TEMPERATURE, chipConfigurationData.soakTemperature, chipConfigurationData.preheatDuration, State::SOAK, pinData);
             break;
         }
         
         case State::SOAK: {
-            doNormalStateUpdate(chipConfigurationData.soakTemperature, chipConfigurationData.soakTemperature, chipConfigurationData.soakDuration, State::SOAK);
+            doNormalStateUpdate(chipConfigurationData.soakTemperature, chipConfigurationData.soakTemperature, chipConfigurationData.soakDuration, State::REFLOW, pinData);
             break;
         }
         
         case State::REFLOW: {
-            doNormalStateUpdate(chipConfigurationData.reflowTemperature, chipConfigurationData.reflowTemperature, chipConfigurationData.reflowDuration, State::SOAK);
+            doNormalStateUpdate(chipConfigurationData.reflowTemperature, chipConfigurationData.reflowTemperature, chipConfigurationData.reflowDuration, State::COOLING, pinData);
             break;
         }
         
         case State::COOLING: {
-            doNormalStateUpdate(chipConfigurationData.reflowTemperature, ROOM_TEMPERATURE, chipConfigurationData.coolingDuration, State::SOAK);
+            doNormalStateUpdate(chipConfigurationData.reflowTemperature, ROOM_TEMPERATURE, chipConfigurationData.coolingDuration, State::FINISHED, pinData);
             break;
         }
         
