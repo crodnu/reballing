@@ -16,10 +16,8 @@ public partial class SelectChipDialog : Form
     public ChipConfiguratonData data;
     public List<ChipConfiguratonData> loadedChips = new List<ChipConfiguratonData>();
 
-    private int roomTemperature = 30;
-    private int preheatingTime = 1000;
-    private int meltingTime = 500;
-    private int coolingTime = 2000;
+    private int roomTemperature = 25;
+    private int meltingTime = 20;
 
     public SelectChipDialog()
     {
@@ -54,29 +52,37 @@ public partial class SelectChipDialog : Form
         data = readTextBoxes();
     }
 
+    private int safeIntParse(string intString)
+    {
+        if (intString.Length == 0 || intString.Any(x => x < '0' || x > '9')) return 0;
+        return int.Parse(intString);
+    }
+
     private ChipConfiguratonData readTextBoxes()
     {
         return new ChipConfiguratonData
         {
             Name = chipNameTextbox.Text,
-            DamageTemperarure = int.Parse(damageTemperatureTextbox.Text),
-            InitialTargetTemperature = int.Parse(initialTemperatureTextbox.Text),
-            FirstPlateauTemperature = int.Parse(firstPlateauTemperatureTextbox.Text),
-            SecondPlateauTemperature = int.Parse(secondPlateauTemperatureTextbox.Text),
-            FirstPlateauDuration = int.Parse(firstPlateauDurationTextbox.Text),
-            SecondPlateauDuration = int.Parse(secondPlateauDurationTextbox.Text)
+            DamageTemperarure = safeIntParse(damageTemperatureTextbox.Text),
+            SoakTemperature = safeIntParse(soakTemperatureTextbox.Text),
+            ReflowTemperature = safeIntParse(reflowTemperatureTextbox.Text),
+            PreheatDuration = safeIntParse(preheatDurationTextbox.Text) * 1000,
+            SoakDuration = safeIntParse(soakDurationTextbox.Text) * 1000,
+            ReflowDuration = safeIntParse(reflowDurationTextbox.Text) * 1000,
+            CoolingDuration = safeIntParse(coolingDurationTextbox.Text) * 1000
         };
-        }
+    }
 
     private void updateTextboxesFromChip()
     {
         chipNameTextbox.Text = data.Name;
-        initialTemperatureTextbox.Text = data.InitialTargetTemperature.ToString();
-        firstPlateauTemperatureTextbox.Text = data.FirstPlateauTemperature.ToString();
-        secondPlateauTemperatureTextbox.Text = data.SecondPlateauTemperature.ToString();
+        soakTemperatureTextbox.Text = data.SoakTemperature.ToString();
+        reflowTemperatureTextbox.Text = data.ReflowTemperature.ToString();
         damageTemperatureTextbox.Text = data.DamageTemperarure.ToString();
-        firstPlateauDurationTextbox.Text = data.FirstPlateauDuration.ToString();
-        secondPlateauDurationTextbox.Text = data.SecondPlateauDuration.ToString();
+        preheatDurationTextbox.Text = data.PreheatDuration.ToString();
+        soakDurationTextbox.Text = data.SoakDuration.ToString();
+        reflowDurationTextbox.Text = data.ReflowDuration.ToString();
+        coolingDurationTextbox.Text = data.CoolingDuration.ToString();
     }
 
     private void loadAllChipsFromDisk()
@@ -119,19 +125,19 @@ public partial class SelectChipDialog : Form
         int time = 0;
         chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, roomTemperature);
 
-        time += preheatingTime;
-        chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.FirstPlateauTemperature);
+        time += textBoxData.PreheatDuration / 1000;
+        chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.SoakTemperature);
             
-        time += textBoxData.FirstPlateauDuration;
-        chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.FirstPlateauTemperature);
+        time += textBoxData.SoakDuration / 1000;
+        chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.SoakTemperature);
         
         time += meltingTime;
-        chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.SecondPlateauTemperature);
+        chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.ReflowTemperature);
 
-        time += textBoxData.SecondPlateauDuration;
-        chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.SecondPlateauTemperature);
+        time += textBoxData.ReflowDuration / 1000;
+        chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.ReflowTemperature);
             
-        time += coolingTime;
+        time += textBoxData.CoolingDuration / 1000;
         chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, roomTemperature);
     }
 

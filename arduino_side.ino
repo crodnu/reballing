@@ -48,7 +48,6 @@ enum class State {
 struct ChipConfigurationData {
     bool isValid = false;
     int damageTemperarure;
-    int initialTargetTemperature; // Not needed?
     int soakTemperature;
     int reflowTemperature;
     int preheatDuration;
@@ -208,6 +207,23 @@ void unpauseReballing() {
     pauseStartTime = 0;
 }
 
+// https://arduino.stackexchange.com/a/1237
+String getValue(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
 void readDataFromPC() {
     String message = readStringFromPC();
     
@@ -228,30 +244,14 @@ void readDataFromPC() {
             pauseReballing();
         }
 
-        int commaPosition = message.indexOf (',');
-
-        if (commaPosition != -1) { // TODO: see if there's a better way to do this.
-            String temp1 = (message.substring(0,commaPosition));
-            message = message.substring(commaPosition+1, message.length());
-            String temp2 = (message.substring(0,commaPosition));
-            message = message.substring(commaPosition+1, message.length());
-            String temp3 = (message.substring(0,commaPosition));
-            message = message.substring(commaPosition+1, message.length());
-            String temp4 = (message.substring(0,commaPosition));
-            message = message.substring(commaPosition+1, message.length());
-            String tiempo1 = (message.substring(0,commaPosition));
-            message = message.substring(commaPosition+1, message.length());
-            String tiempo2 = (message.substring(0,commaPosition));
-
-            chipConfigurationData.damageTemperarure = temp4.toInt();
-            chipConfigurationData.soakTemperature = temp2.toInt();
-            chipConfigurationData.reflowTemperature = temp3.toInt();
-            chipConfigurationData.preheatDuration = 180000; // TODO
-            chipConfigurationData.soakDuration = tiempo1.toInt();
-            chipConfigurationData.reflowDuration = tiempo2.toInt();
-            chipConfigurationData.coolingDuration = 10000; // TODO
-            chipConfigurationData.isValid = true;
-        }
+		chipConfigurationData.soakTemperature = getValue(message, ',', 0).toInt();
+		chipConfigurationData.reflowTemperature = getValue(message, ',', 1).toInt();
+		chipConfigurationData.damageTemperarure = getValue(message, ',', 2).toInt();
+		chipConfigurationData.preheatDuration = getValue(message, ',', 3).toInt();
+		chipConfigurationData.soakDuration = getValue(message, ',', 4).toInt();
+		chipConfigurationData.reflowDuration = getValue(message, ',', 5).toInt();
+		chipConfigurationData.coolingDuration = getValue(message, ',', 6).toInt();
+		chipConfigurationData.isValid = true;
     }
 }
 

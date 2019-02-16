@@ -147,12 +147,13 @@ public partial class MainProgramForm : Form
     private void sendDataButton_Click(object sender, EventArgs e)
     {
         string messageToSend = 
-            chipConfiguratonData.InitialTargetTemperature + ","
-            + chipConfiguratonData.FirstPlateauTemperature + ","
-            + chipConfiguratonData.SecondPlateauTemperature + ","
+            chipConfiguratonData.SoakTemperature + ","
+            + chipConfiguratonData.ReflowTemperature + ","
             + chipConfiguratonData.DamageTemperarure + ","
-            + chipConfiguratonData.FirstPlateauDuration + ","
-            + chipConfiguratonData.SecondPlateauDuration + ",";
+            + chipConfiguratonData.PreheatDuration + ","
+            + chipConfiguratonData.SoakDuration + ","
+            + chipConfiguratonData.ReflowDuration + ","
+            + chipConfiguratonData.CoolingDuration + ",";
 
         arduinoPort.Write(messageToSend);
 
