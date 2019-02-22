@@ -79,10 +79,10 @@ public partial class SelectChipDialog : Form
         soakTemperatureTextbox.Text = data.SoakTemperature.ToString();
         reflowTemperatureTextbox.Text = data.ReflowTemperature.ToString();
         damageTemperatureTextbox.Text = data.DamageTemperarure.ToString();
-        preheatDurationTextbox.Text = data.PreheatDuration.ToString();
-        soakDurationTextbox.Text = data.SoakDuration.ToString();
-        reflowDurationTextbox.Text = data.ReflowDuration.ToString();
-        coolingDurationTextbox.Text = data.CoolingDuration.ToString();
+        preheatDurationTextbox.Text = (data.PreheatDuration / 1000).ToString();
+        soakDurationTextbox.Text = (data.SoakDuration / 1000).ToString();
+        reflowDurationTextbox.Text = (data.ReflowDuration / 1000).ToString();
+        coolingDurationTextbox.Text = (data.CoolingDuration / 1000).ToString();
     }
 
     private void loadAllChipsFromDisk()

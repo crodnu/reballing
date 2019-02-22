@@ -30,11 +30,11 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainProgramForm));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.exitButton = new System.Windows.Forms.Button();
             this.portComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -67,6 +67,28 @@
             this.label5 = new System.Windows.Forms.Label();
             this.ReballingButtonsControl = new System.Windows.Forms.GroupBox();
             this.pictureBox14 = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.preheatDurationLabel = new System.Windows.Forms.Label();
+            this.soakDurationLabel = new System.Windows.Forms.Label();
+            this.reflowDurationLabel = new System.Windows.Forms.Label();
+            this.coolingDurationLabel = new System.Windows.Forms.Label();
+            this.soakTemperatureLabel = new System.Windows.Forms.Label();
+            this.reflowTemperatureLabel = new System.Windows.Forms.Label();
+            this.damageTemperatureLabel = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.preheatProgressBar = new System.Windows.Forms.ProgressBar();
+            this.soakProgressBar = new System.Windows.Forms.ProgressBar();
+            this.reflowProgressBar = new System.Windows.Forms.ProgressBar();
+            this.coolingProgressBar = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.runningIndicator)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.temperatureChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowerResistanceIcon1)).BeginInit();
@@ -179,9 +201,10 @@
             // 
             // sendDataButton
             // 
-            this.sendDataButton.Location = new System.Drawing.Point(12, 369);
+            this.sendDataButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sendDataButton.Location = new System.Drawing.Point(12, 550);
             this.sendDataButton.Name = "sendDataButton";
-            this.sendDataButton.Size = new System.Drawing.Size(75, 29);
+            this.sendDataButton.Size = new System.Drawing.Size(158, 29);
             this.sendDataButton.TabIndex = 20;
             this.sendDataButton.Text = "Enviar";
             this.sendDataButton.UseVisualStyleBackColor = true;
@@ -190,36 +213,36 @@
             // 
             // temperatureChart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.temperatureChart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.temperatureChart.Legends.Add(legend1);
-            this.temperatureChart.Location = new System.Drawing.Point(197, 234);
+            chartArea2.Name = "ChartArea1";
+            this.temperatureChart.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.temperatureChart.Legends.Add(legend2);
+            this.temperatureChart.Location = new System.Drawing.Point(274, 234);
             this.temperatureChart.Name = "temperatureChart";
-            series1.BorderWidth = 4;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Color = System.Drawing.Color.Red;
-            series1.LabelBorderWidth = 3;
-            series1.Legend = "Legend1";
-            series1.Name = "Control";
-            series1.YValuesPerPoint = 3;
-            series2.BorderWidth = 4;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Color = System.Drawing.Color.Green;
-            series2.Legend = "Legend1";
-            series2.Name = "Sonda de abajo";
-            series3.BorderWidth = 4;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Color = System.Drawing.Color.Blue;
-            series3.Legend = "Legend1";
-            series3.Name = "Sonda de arriba";
-            this.temperatureChart.Series.Add(series1);
-            this.temperatureChart.Series.Add(series2);
-            this.temperatureChart.Series.Add(series3);
-            this.temperatureChart.Size = new System.Drawing.Size(961, 393);
+            series4.BorderWidth = 4;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.Red;
+            series4.LabelBorderWidth = 3;
+            series4.Legend = "Legend1";
+            series4.Name = "Control";
+            series4.YValuesPerPoint = 3;
+            series5.BorderWidth = 4;
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Color = System.Drawing.Color.Green;
+            series5.Legend = "Legend1";
+            series5.Name = "Sonda de abajo";
+            series6.BorderWidth = 4;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Color = System.Drawing.Color.Blue;
+            series6.Legend = "Legend1";
+            series6.Name = "Sonda de arriba";
+            this.temperatureChart.Series.Add(series4);
+            this.temperatureChart.Series.Add(series5);
+            this.temperatureChart.Series.Add(series6);
+            this.temperatureChart.Size = new System.Drawing.Size(884, 393);
             this.temperatureChart.TabIndex = 27;
             this.temperatureChart.Text = "chart1";
             // 
@@ -230,7 +253,7 @@
             // selectChipButton
             // 
             this.selectChipButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.selectChipButton.Location = new System.Drawing.Point(33, 465);
+            this.selectChipButton.Location = new System.Drawing.Point(12, 596);
             this.selectChipButton.Name = "selectChipButton";
             this.selectChipButton.Size = new System.Drawing.Size(158, 31);
             this.selectChipButton.TabIndex = 31;
@@ -462,12 +485,246 @@
             this.pictureBox14.Visible = false;
             this.pictureBox14.WaitOnLoad = true;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(6, 276);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(207, 16);
+            this.label7.TabIndex = 78;
+            this.label7.Text = "Tiempo de precalentamiento";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(6, 303);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(158, 16);
+            this.label2.TabIndex = 79;
+            this.label2.Text = "Tiempo de activación";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(6, 330);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(149, 16);
+            this.label6.TabIndex = 80;
+            this.label6.Text = "Tiempo de fundición";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(6, 356);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(172, 16);
+            this.label8.TabIndex = 81;
+            this.label8.Text = "Tiempo de enfriamiento";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(6, 408);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(194, 16);
+            this.label9.TabIndex = 82;
+            this.label9.Text = "Temperatura de activacion";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(6, 436);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(185, 16);
+            this.label10.TabIndex = 83;
+            this.label10.Text = "Temperatura de fundición";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(6, 494);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(158, 16);
+            this.label11.TabIndex = 84;
+            this.label11.Text = "Temperatura de daño";
+            // 
+            // preheatDurationLabel
+            // 
+            this.preheatDurationLabel.AutoSize = true;
+            this.preheatDurationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.preheatDurationLabel.Location = new System.Drawing.Point(236, 276);
+            this.preheatDurationLabel.Name = "preheatDurationLabel";
+            this.preheatDurationLabel.Size = new System.Drawing.Size(30, 16);
+            this.preheatDurationLabel.TabIndex = 85;
+            this.preheatDurationLabel.Text = "n/a";
+            // 
+            // soakDurationLabel
+            // 
+            this.soakDurationLabel.AutoSize = true;
+            this.soakDurationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.soakDurationLabel.Location = new System.Drawing.Point(236, 303);
+            this.soakDurationLabel.Name = "soakDurationLabel";
+            this.soakDurationLabel.Size = new System.Drawing.Size(30, 16);
+            this.soakDurationLabel.TabIndex = 86;
+            this.soakDurationLabel.Text = "n/a";
+            // 
+            // reflowDurationLabel
+            // 
+            this.reflowDurationLabel.AutoSize = true;
+            this.reflowDurationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.reflowDurationLabel.Location = new System.Drawing.Point(236, 330);
+            this.reflowDurationLabel.Name = "reflowDurationLabel";
+            this.reflowDurationLabel.Size = new System.Drawing.Size(30, 16);
+            this.reflowDurationLabel.TabIndex = 87;
+            this.reflowDurationLabel.Text = "n/a";
+            // 
+            // coolingDurationLabel
+            // 
+            this.coolingDurationLabel.AutoSize = true;
+            this.coolingDurationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.coolingDurationLabel.Location = new System.Drawing.Point(236, 356);
+            this.coolingDurationLabel.Name = "coolingDurationLabel";
+            this.coolingDurationLabel.Size = new System.Drawing.Size(30, 16);
+            this.coolingDurationLabel.TabIndex = 88;
+            this.coolingDurationLabel.Text = "n/a";
+            // 
+            // soakTemperatureLabel
+            // 
+            this.soakTemperatureLabel.AutoSize = true;
+            this.soakTemperatureLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.soakTemperatureLabel.Location = new System.Drawing.Point(236, 408);
+            this.soakTemperatureLabel.Name = "soakTemperatureLabel";
+            this.soakTemperatureLabel.Size = new System.Drawing.Size(30, 16);
+            this.soakTemperatureLabel.TabIndex = 89;
+            this.soakTemperatureLabel.Text = "n/a";
+            // 
+            // reflowTemperatureLabel
+            // 
+            this.reflowTemperatureLabel.AutoSize = true;
+            this.reflowTemperatureLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.reflowTemperatureLabel.Location = new System.Drawing.Point(236, 436);
+            this.reflowTemperatureLabel.Name = "reflowTemperatureLabel";
+            this.reflowTemperatureLabel.Size = new System.Drawing.Size(30, 16);
+            this.reflowTemperatureLabel.TabIndex = 90;
+            this.reflowTemperatureLabel.Text = "n/a";
+            // 
+            // damageTemperatureLabel
+            // 
+            this.damageTemperatureLabel.AutoSize = true;
+            this.damageTemperatureLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.damageTemperatureLabel.Location = new System.Drawing.Point(236, 494);
+            this.damageTemperatureLabel.Name = "damageTemperatureLabel";
+            this.damageTemperatureLabel.Size = new System.Drawing.Size(30, 16);
+            this.damageTemperatureLabel.TabIndex = 91;
+            this.damageTemperatureLabel.Text = "n/a";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(719, 165);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(154, 16);
+            this.label12.TabIndex = 95;
+            this.label12.Text = "Fase de enfriamiento";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(719, 131);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(131, 16);
+            this.label13.TabIndex = 94;
+            this.label13.Text = "Fase de fundición";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(719, 96);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(140, 16);
+            this.label14.TabIndex = 93;
+            this.label14.Text = "Fase de activación";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(719, 62);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(189, 16);
+            this.label15.TabIndex = 92;
+            this.label15.Text = "Fase de precalentamiento";
+            // 
+            // preheatProgressBar
+            // 
+            this.preheatProgressBar.Location = new System.Drawing.Point(914, 55);
+            this.preheatProgressBar.Name = "preheatProgressBar";
+            this.preheatProgressBar.Size = new System.Drawing.Size(151, 23);
+            this.preheatProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.preheatProgressBar.TabIndex = 96;
+            // 
+            // soakProgressBar
+            // 
+            this.soakProgressBar.Location = new System.Drawing.Point(914, 89);
+            this.soakProgressBar.Name = "soakProgressBar";
+            this.soakProgressBar.Size = new System.Drawing.Size(151, 23);
+            this.soakProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.soakProgressBar.TabIndex = 97;
+            // 
+            // reflowProgressBar
+            // 
+            this.reflowProgressBar.Location = new System.Drawing.Point(914, 124);
+            this.reflowProgressBar.Name = "reflowProgressBar";
+            this.reflowProgressBar.Size = new System.Drawing.Size(151, 23);
+            this.reflowProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.reflowProgressBar.TabIndex = 98;
+            // 
+            // coolingProgressBar
+            // 
+            this.coolingProgressBar.Location = new System.Drawing.Point(914, 158);
+            this.coolingProgressBar.Name = "coolingProgressBar";
+            this.coolingProgressBar.Size = new System.Drawing.Size(151, 23);
+            this.coolingProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.coolingProgressBar.TabIndex = 99;
+            // 
             // MainProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(1184, 639);
+            this.Controls.Add(this.coolingProgressBar);
+            this.Controls.Add(this.reflowProgressBar);
+            this.Controls.Add(this.soakProgressBar);
+            this.Controls.Add(this.preheatProgressBar);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.damageTemperatureLabel);
+            this.Controls.Add(this.reflowTemperatureLabel);
+            this.Controls.Add(this.soakTemperatureLabel);
+            this.Controls.Add(this.coolingDurationLabel);
+            this.Controls.Add(this.reflowDurationLabel);
+            this.Controls.Add(this.soakDurationLabel);
+            this.Controls.Add(this.preheatDurationLabel);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.ReballingButtonsControl);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -552,6 +809,28 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox ReballingButtonsControl;
         public System.Windows.Forms.PictureBox pictureBox14;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label preheatDurationLabel;
+        private System.Windows.Forms.Label soakDurationLabel;
+        private System.Windows.Forms.Label reflowDurationLabel;
+        private System.Windows.Forms.Label coolingDurationLabel;
+        private System.Windows.Forms.Label soakTemperatureLabel;
+        private System.Windows.Forms.Label reflowTemperatureLabel;
+        private System.Windows.Forms.Label damageTemperatureLabel;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ProgressBar preheatProgressBar;
+        private System.Windows.Forms.ProgressBar soakProgressBar;
+        private System.Windows.Forms.ProgressBar reflowProgressBar;
+        private System.Windows.Forms.ProgressBar coolingProgressBar;
     }
 }
 

@@ -22,6 +22,8 @@ public partial class MainProgramForm : Form
     private bool LowerFanIsTurnedOn;
     private readonly bool[] LowerResistancesAreTurnedOn = new bool[4];
     private bool UpperResistanceIsTurnedOn;
+    private int currentState = 0;
+    private int statePercentage = 0;
 
     private ChipConfiguratonData chipConfiguratonData;
 
@@ -80,7 +82,21 @@ public partial class MainProgramForm : Form
         UpperFanIsTurnedOn = arr[8] == "0";
         LowerFanIsTurnedOn = arr[9] == "0";
 
-        // arr[13] unused
+        currentState = int.Parse(arr[10]);
+        statePercentage = int.Parse(arr[11]);
+    }
+    
+    private int getProgressBarValue(int index, int currentState, int progress) { 
+        if(index > currentState) return 0;
+        if(index < currentState) return 100;
+        return Math.Min(progress, 100);
+    }
+
+    private void updateProgressBars(int state, int progress) {
+        preheatProgressBar.Value = getProgressBarValue(3, state, progress);
+        soakProgressBar.Value = getProgressBarValue(4, state, progress);
+        reflowProgressBar.Value = getProgressBarValue(5, state, progress);
+        coolingProgressBar.Value = getProgressBarValue(6, state, progress);
     }
 
     private void UpdateGUI()
@@ -104,6 +120,8 @@ public partial class MainProgramForm : Form
         controlTemperatureLabel.Text = ControlTemperatureStr + "°C";
         lowerProbeTemperature.Text = LowerProbeTemperatureStr + "°C";
         upperProbeTemperature.Text = UpperProbeTemperatureStr + "°C";
+        
+        updateProgressBars(currentState, statePercentage);
     }
 
     private void arduinoPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -166,6 +184,16 @@ public partial class MainProgramForm : Form
         rt += timer.Interval / 1000.0;
     }
 
+    private void loadChipDataLabels() {
+        preheatDurationLabel.Text = (chipConfiguratonData.PreheatDuration / 1000).ToString();
+        soakDurationLabel.Text = (chipConfiguratonData.SoakDuration / 1000).ToString();
+        reflowDurationLabel.Text = (chipConfiguratonData.ReflowDuration / 1000).ToString();
+        coolingDurationLabel.Text = (chipConfiguratonData.CoolingDuration / 1000).ToString();
+        soakTemperatureLabel.Text = chipConfiguratonData.SoakTemperature.ToString();
+        reflowTemperatureLabel.Text = chipConfiguratonData.ReflowTemperature.ToString();
+        damageTemperatureLabel.Text = chipConfiguratonData.DamageTemperarure.ToString();
+    }
+
     private void selectChipButton_Click(object sender, EventArgs e)
     {
         SelectChipDialog selectChipDialog = new SelectChipDialog();
@@ -173,6 +201,7 @@ public partial class MainProgramForm : Form
         if (res == DialogResult.OK)
         {
             chipConfiguratonData = selectChipDialog.data;
+            loadChipDataLabels();
             portComboBox.Visible = true;
         }
     }

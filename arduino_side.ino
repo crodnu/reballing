@@ -35,14 +35,14 @@
 #define ROOM_TEMPERATURE 25
 
 enum class State {
-    NOT_STARTED,
-    PAUSED_FANS_ON,
-    PAUSED_FANS_OFF,
-    PREHEAT,
-    SOAK,
-    REFLOW,
-    COOLING,
-    FINISHED
+    NOT_STARTED = 0,
+    PAUSED_FANS_ON = 1,
+    PAUSED_FANS_OFF = 2,
+    PREHEAT = 3,
+    SOAK = 4,
+    REFLOW = 5,
+    COOLING = 6,
+    FINISHED = 7
 };
 
 struct ChipConfigurationData {
@@ -72,6 +72,7 @@ State currentState = State::NOT_STARTED;
 ChipConfigurationData chipConfigurationData;
 unsigned long pauseStartTime = 0;
 unsigned long currentStateStartTime = 0;
+double statePercentage;
 
 MAX6675_Thermocouple controlThermocouple(CONTROL_THERMOCOUPLE_SCK_PIN, CONTROL_THERMOCOUPLE_CS_PIN, CONTROL_THERMOCOUPLE_SO_PIN);
 MAX6675_Thermocouple lowerThermocouple(LOWER_THERMOCOUPLE_SCK_PIN, LOWER_THERMOCOUPLE_CS_PIN, LOWER_THERMOCOUPLE_SO_PIN);
@@ -159,6 +160,10 @@ void sendDataToComputer(const PinData& data, int tt) {
     Serial.print(boolToBin(data.upperFanIsTurnedOn));
     Serial.print("|");
     Serial.print(boolToBin(data.lowerFanIsTurnedOn));
+    Serial.print("|");
+    Serial.print(static_cast<int>(currentState));
+    Serial.print("|");
+    Serial.print((int)(statePercentage * 100));
     Serial.print("|00");
     Serial.println("");
 }
@@ -244,14 +249,16 @@ void readDataFromPC() {
             pauseReballing();
         }
 
-		chipConfigurationData.soakTemperature = getValue(message, ',', 0).toInt();
-		chipConfigurationData.reflowTemperature = getValue(message, ',', 1).toInt();
-		chipConfigurationData.damageTemperarure = getValue(message, ',', 2).toInt();
-		chipConfigurationData.preheatDuration = getValue(message, ',', 3).toInt();
-		chipConfigurationData.soakDuration = getValue(message, ',', 4).toInt();
-		chipConfigurationData.reflowDuration = getValue(message, ',', 5).toInt();
-		chipConfigurationData.coolingDuration = getValue(message, ',', 6).toInt();
-		chipConfigurationData.isValid = true;
+        if(getValue(message, ',', 1) == "") return;
+
+    		chipConfigurationData.soakTemperature = getValue(message, ',', 0).toInt();
+    		chipConfigurationData.reflowTemperature = getValue(message, ',', 1).toInt();
+    		chipConfigurationData.damageTemperarure = getValue(message, ',', 2).toInt();
+    		chipConfigurationData.preheatDuration = getValue(message, ',', 3).toInt();
+    		chipConfigurationData.soakDuration = getValue(message, ',', 4).toInt();
+    		chipConfigurationData.reflowDuration = getValue(message, ',', 5).toInt();
+    		chipConfigurationData.coolingDuration = getValue(message, ',', 6).toInt();
+    		chipConfigurationData.isValid = true;
     }
 }
 
@@ -265,6 +272,7 @@ int getStateTemperature(int startTime, int stateDuration, int initialTemperature
 }
 
 void doNormalStateUpdate(int initialTemperature, int finalTemperature, int stateDuration, State nextState, const PinData& pinData) {
+    statePercentage = getStatePercentage(currentStateStartTime, stateDuration);
     int targetTemperature = getStateTemperature(currentStateStartTime, stateDuration, initialTemperature, finalTemperature);
     
     if(pinData.controlTemperature < targetTemperature) {
