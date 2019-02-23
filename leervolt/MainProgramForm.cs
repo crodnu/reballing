@@ -25,6 +25,15 @@ public partial class MainProgramForm : Form
     private int currentState = 0;
     private int statePercentage = 0;
 
+    private const int NOT_STARTED_STATE = 0;
+    private const int PAUSED_FANS_ON_STATE = 1;
+    private const int PAUSED_FANS_OFF_STATE = 2;
+    private const int PREHEAT_STATE = 3;
+    private const int SOAK_STATE = 4;
+    private const int REFLOW_STATE = 5;
+    private const int COOLING_STATE = 6;
+    private const int FINISHED_STATE = 7;
+
     private ChipConfiguratonData chipConfiguratonData;
 
     public MainProgramForm()
@@ -59,6 +68,22 @@ public partial class MainProgramForm : Form
         }
     }
 
+    private void restartGraph()
+    {
+        temperatureChart.Series["Sonda de abajo"].Points.Clear();
+        temperatureChart.Series["Sonda de arriba"].Points.Clear();
+
+        temperatureChart.Series["Temperatura de enfriamiento"].Points.Clear();
+        temperatureChart.Series["Temperatura de activación"].Points.Clear();
+        temperatureChart.Series["Temperatura de fundición"].Points.Clear();
+        temperatureChart.Series["Temperatura de enfriamiento"].Points.Clear();
+    }
+
+    private void onReballingRestarted()
+    {
+        restartGraph();
+    }
+
     private void LoadDataFromPort()
     {
         string dato = arduinoPort.ReadLine();
@@ -82,6 +107,7 @@ public partial class MainProgramForm : Form
         UpperFanIsTurnedOn = arr[8] == "0";
         LowerFanIsTurnedOn = arr[9] == "0";
 
+        if (currentState > int.Parse(arr[10])) onReballingRestarted();
         currentState = int.Parse(arr[10]);
         statePercentage = int.Parse(arr[11]);
     }
@@ -93,10 +119,23 @@ public partial class MainProgramForm : Form
     }
 
     private void updateProgressBars(int state, int progress) {
-        preheatProgressBar.Value = getProgressBarValue(3, state, progress);
-        soakProgressBar.Value = getProgressBarValue(4, state, progress);
-        reflowProgressBar.Value = getProgressBarValue(5, state, progress);
-        coolingProgressBar.Value = getProgressBarValue(6, state, progress);
+        preheatProgressBar.Value = getProgressBarValue(PREHEAT_STATE, state, progress);
+        soakProgressBar.Value = getProgressBarValue(SOAK_STATE, state, progress);
+        reflowProgressBar.Value = getProgressBarValue(REFLOW_STATE, state, progress);
+        coolingProgressBar.Value = getProgressBarValue(COOLING_STATE, state, progress);
+    }
+
+    private void updateGraph()
+    {
+        float time = (float) rt / 1000;
+
+        temperatureChart.Series["Sonda de abajo"].Points.AddXY(time, LowerProbeTemperature);
+        temperatureChart.Series["Sonda de arriba"].Points.AddXY(time, UpperProbeTemperature);
+
+        temperatureChart.Series["Temperatura de enfriamiento"].Points.AddXY(time, ControlTemperature);
+        if (currentState >= SOAK_STATE) temperatureChart.Series["Temperatura de activación"].Points.AddXY(time, ControlTemperature);
+        if (currentState >= REFLOW_STATE) temperatureChart.Series["Temperatura de fundición"].Points.AddXY(time, ControlTemperature);
+        if (currentState >= COOLING_STATE) temperatureChart.Series["Temperatura de enfriamiento"].Points.AddXY(time, ControlTemperature);
     }
 
     private void UpdateGUI()
@@ -113,15 +152,12 @@ public partial class MainProgramForm : Form
         lowerFanOnIcon.Visible = LowerFanIsTurnedOn;
         lowerFanOffIcon.Visible = !LowerFanIsTurnedOn;
 
-        temperatureChart.Series[0].Points.AddXY(rt, ControlTemperature);
-        temperatureChart.Series[1].Points.AddXY(rt, LowerProbeTemperature);
-        temperatureChart.Series[2].Points.AddXY(rt, UpperProbeTemperature);
-
         controlTemperatureLabel.Text = ControlTemperatureStr + "°C";
         lowerProbeTemperature.Text = LowerProbeTemperatureStr + "°C";
         upperProbeTemperature.Text = UpperProbeTemperatureStr + "°C";
         
         updateProgressBars(currentState, statePercentage);
+        updateGraph();
     }
 
     private void arduinoPort_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -203,6 +239,9 @@ public partial class MainProgramForm : Form
             chipConfiguratonData = selectChipDialog.data;
             loadChipDataLabels();
             portComboBox.Visible = true;
+            temperatureChart.Series["dummy"].Points.Clear();
+            int totalReballingTime = (chipConfiguratonData.PreheatDuration + chipConfiguratonData.CoolingDuration + chipConfiguratonData.SoakDuration + chipConfiguratonData.CoolingDuration) / 1000;
+            temperatureChart.Series["dummy"].Points.AddXY(totalReballingTime, 0);
         }
     }
 

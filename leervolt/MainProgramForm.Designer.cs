@@ -30,11 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainProgramForm));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.exitButton = new System.Windows.Forms.Button();
             this.portComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -213,19 +217,34 @@
             // 
             // temperatureChart
             // 
-            chartArea2.Name = "ChartArea1";
-            this.temperatureChart.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.temperatureChart.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.temperatureChart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.temperatureChart.Legends.Add(legend1);
             this.temperatureChart.Location = new System.Drawing.Point(274, 234);
             this.temperatureChart.Name = "temperatureChart";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
+            series1.Color = System.Drawing.Color.MediumTurquoise;
+            series1.Legend = "Legend1";
+            series1.Name = "Temperatura de enfriamiento";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
+            series2.Color = System.Drawing.Color.Red;
+            series2.Legend = "Legend1";
+            series2.Name = "Temperatura de fundición";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
+            series3.Color = System.Drawing.Color.Yellow;
+            series3.Legend = "Legend1";
+            series3.Name = "Temperatura de activación";
             series4.BorderWidth = 4;
             series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Color = System.Drawing.Color.Red;
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
+            series4.Color = System.Drawing.Color.OliveDrab;
             series4.LabelBorderWidth = 3;
             series4.Legend = "Legend1";
-            series4.Name = "Control";
+            series4.Name = "Temperatura de precalentamiento";
             series4.YValuesPerPoint = 3;
             series5.BorderWidth = 4;
             series5.ChartArea = "ChartArea1";
@@ -239,9 +258,18 @@
             series6.Color = System.Drawing.Color.Blue;
             series6.Legend = "Legend1";
             series6.Name = "Sonda de arriba";
+            series7.ChartArea = "ChartArea1";
+            series7.Color = System.Drawing.Color.Transparent;
+            series7.IsVisibleInLegend = false;
+            series7.Legend = "Legend1";
+            series7.Name = "dummy";
+            this.temperatureChart.Series.Add(series1);
+            this.temperatureChart.Series.Add(series2);
+            this.temperatureChart.Series.Add(series3);
             this.temperatureChart.Series.Add(series4);
             this.temperatureChart.Series.Add(series5);
             this.temperatureChart.Series.Add(series6);
+            this.temperatureChart.Series.Add(series7);
             this.temperatureChart.Size = new System.Drawing.Size(884, 393);
             this.temperatureChart.TabIndex = 27;
             this.temperatureChart.Text = "chart1";
