@@ -17,7 +17,7 @@ public partial class SelectChipDialog : Form
     public List<ChipConfiguratonData> loadedChips = new List<ChipConfiguratonData>();
 
     private int roomTemperature = 25;
-    private int meltingTime = 20;
+    private int meltingTime = 10;
 
     public SelectChipDialog()
     {
@@ -134,7 +134,7 @@ public partial class SelectChipDialog : Form
         time += meltingTime;
         chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.ReflowTemperature);
 
-        time += textBoxData.ReflowDuration / 1000;
+        time += textBoxData.ReflowDuration / 1000 - meltingTime;
         chipTemperatureGraph.Series["Temperatura"].Points.AddXY(time, textBoxData.ReflowTemperature);
             
         time += textBoxData.CoolingDuration / 1000;

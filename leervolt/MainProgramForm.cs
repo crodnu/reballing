@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
 using System.Windows.Forms;
@@ -10,7 +11,6 @@ public partial class MainProgramForm : Form
 {
     private bool IsPaused = false;
     private bool HasStartedReballing = false;
-    private double rt = 0;
 
     private double ControlTemperature;
     private double UpperProbeTemperature;
@@ -22,8 +22,10 @@ public partial class MainProgramForm : Form
     private bool LowerFanIsTurnedOn;
     private readonly bool[] LowerResistancesAreTurnedOn = new bool[4];
     private bool UpperResistanceIsTurnedOn;
-    private int currentState = 0;
+    private int currentState = NOT_STARTED_STATE;
+    private int lastState = NOT_STARTED_STATE;
     private int statePercentage = 0;
+    private Stopwatch sw = new Stopwatch();
 
     private const int NOT_STARTED_STATE = 0;
     private const int PAUSED_FANS_ON_STATE = 1;
@@ -33,6 +35,10 @@ public partial class MainProgramForm : Form
     private const int REFLOW_STATE = 5;
     private const int COOLING_STATE = 6;
     private const int FINISHED_STATE = 7;
+    private const int EMERGENCY_COOLING_STATE = 8;
+
+    private const int roomTemperature = 25;
+    private const int meltingTime = 10;
 
     private ChipConfiguratonData chipConfiguratonData;
 
@@ -65,6 +71,7 @@ public partial class MainProgramForm : Form
         {
             label3.Text = "PUERTO ENCONTRADO";
             sendDataButton.Visible = true;
+            emergencyCoolingButton.Visible = true;
         }
     }
 
@@ -73,7 +80,7 @@ public partial class MainProgramForm : Form
         temperatureChart.Series["Sonda de abajo"].Points.Clear();
         temperatureChart.Series["Sonda de arriba"].Points.Clear();
 
-        temperatureChart.Series["Temperatura de enfriamiento"].Points.Clear();
+        temperatureChart.Series["Temperatura de precalentamiento"].Points.Clear();
         temperatureChart.Series["Temperatura de activación"].Points.Clear();
         temperatureChart.Series["Temperatura de fundición"].Points.Clear();
         temperatureChart.Series["Temperatura de enfriamiento"].Points.Clear();
@@ -107,7 +114,7 @@ public partial class MainProgramForm : Form
         UpperFanIsTurnedOn = arr[8] == "0";
         LowerFanIsTurnedOn = arr[9] == "0";
 
-        if (currentState > int.Parse(arr[10])) onReballingRestarted();
+        lastState = currentState;
         currentState = int.Parse(arr[10]);
         statePercentage = int.Parse(arr[11]);
     }
@@ -127,15 +134,16 @@ public partial class MainProgramForm : Form
 
     private void updateGraph()
     {
-        float time = (float) rt / 1000;
+        long time = sw.ElapsedMilliseconds / 1000;
 
         temperatureChart.Series["Sonda de abajo"].Points.AddXY(time, LowerProbeTemperature);
         temperatureChart.Series["Sonda de arriba"].Points.AddXY(time, UpperProbeTemperature);
 
-        temperatureChart.Series["Temperatura de enfriamiento"].Points.AddXY(time, ControlTemperature);
-        if (currentState >= SOAK_STATE) temperatureChart.Series["Temperatura de activación"].Points.AddXY(time, ControlTemperature);
-        if (currentState >= REFLOW_STATE) temperatureChart.Series["Temperatura de fundición"].Points.AddXY(time, ControlTemperature);
-        if (currentState >= COOLING_STATE) temperatureChart.Series["Temperatura de enfriamiento"].Points.AddXY(time, ControlTemperature);
+        temperatureChart.Series["Temperatura de precalentamiento"].Points.AddXY(time, currentState == PREHEAT_STATE ? ControlTemperature : 0);
+        temperatureChart.Series["Temperatura de activación"].Points.AddXY(time, currentState == SOAK_STATE ? ControlTemperature : 0);
+        temperatureChart.Series["Temperatura de fundición"].Points.AddXY(time, currentState == REFLOW_STATE ? ControlTemperature : 0);
+        temperatureChart.Series["Temperatura de enfriamiento"].Points.AddXY(time, currentState == COOLING_STATE ? ControlTemperature : 0);
+        temperatureChart.Series["Enfriamiento de emergencia"].Points.AddXY(time, currentState == EMERGENCY_COOLING_STATE ? ControlTemperature : 0);
     }
 
     private void UpdateGUI()
@@ -156,6 +164,9 @@ public partial class MainProgramForm : Form
         lowerProbeTemperature.Text = LowerProbeTemperatureStr + "°C";
         upperProbeTemperature.Text = UpperProbeTemperatureStr + "°C";
         
+        if (currentState == PAUSED_FANS_OFF_STATE || currentState == PAUSED_FANS_ON_STATE) return;
+        if (currentState < lastState) onReballingRestarted();
+
         updateProgressBars(currentState, statePercentage);
         updateGraph();
     }
@@ -166,6 +177,22 @@ public partial class MainProgramForm : Form
         {
             LoadDataFromPort();
             UpdateGUI();
+        }
+    }
+
+    private bool isReballingState(int state)
+    {
+        switch(state) {
+            case NOT_STARTED_STATE: return false;
+            case PAUSED_FANS_ON_STATE: return false;
+            case PAUSED_FANS_OFF_STATE: return false;
+            case PREHEAT_STATE: return true;
+            case SOAK_STATE: return true;
+            case REFLOW_STATE: return true;
+            case COOLING_STATE: return true;
+            case FINISHED_STATE: return false;
+            case EMERGENCY_COOLING_STATE: return true; // To update the time on the graph.
+            default: return false;
         }
     }
 
@@ -181,6 +208,8 @@ public partial class MainProgramForm : Form
 
     private void startButton_Click(object sender, EventArgs e)
     {
+        if(!HasStartedReballing) sw.Reset();
+        sw.Start();
         arduinoPort.WriteLine("7");
         runningIndicator.Visible = true;
         startButton.Image = pictureBox13.Image;
@@ -191,6 +220,7 @@ public partial class MainProgramForm : Form
 
     private void pauseButton_Click(object sender, EventArgs e)
     {
+        sw.Stop();
         arduinoPort.WriteLine("9");
         runningIndicator.Visible = false;
         pauseButton.Image = pictureBox15.Image;
@@ -215,11 +245,6 @@ public partial class MainProgramForm : Form
         sendDataButton.Hide();
     }
 
-    private void timer_Tick(object sender, EventArgs e)
-    {
-        rt += timer.Interval / 1000.0;
-    }
-
     private void loadChipDataLabels() {
         preheatDurationLabel.Text = (chipConfiguratonData.PreheatDuration / 1000).ToString();
         soakDurationLabel.Text = (chipConfiguratonData.SoakDuration / 1000).ToString();
@@ -228,6 +253,29 @@ public partial class MainProgramForm : Form
         soakTemperatureLabel.Text = chipConfiguratonData.SoakTemperature.ToString();
         reflowTemperatureLabel.Text = chipConfiguratonData.ReflowTemperature.ToString();
         damageTemperatureLabel.Text = chipConfiguratonData.DamageTemperarure.ToString();
+    }
+    
+    private void drawChipTemperatureGraph()
+    {
+        temperatureChart.Series["Curva del chip"].Points.Clear();
+
+        int time = 0;
+        temperatureChart.Series["Curva del chip"].Points.AddXY(time, roomTemperature);
+
+        time += chipConfiguratonData.PreheatDuration / 1000;
+        temperatureChart.Series["Curva del chip"].Points.AddXY(time, chipConfiguratonData.SoakTemperature);
+
+        time += chipConfiguratonData.SoakDuration / 1000;
+        temperatureChart.Series["Curva del chip"].Points.AddXY(time, chipConfiguratonData.SoakTemperature);
+
+        time += meltingTime;
+        temperatureChart.Series["Curva del chip"].Points.AddXY(time, chipConfiguratonData.ReflowTemperature);
+
+        time += chipConfiguratonData.ReflowDuration / 1000 - meltingTime;
+        temperatureChart.Series["Curva del chip"].Points.AddXY(time, chipConfiguratonData.ReflowTemperature);
+
+        time += chipConfiguratonData.CoolingDuration / 1000;
+        temperatureChart.Series["Curva del chip"].Points.AddXY(time, roomTemperature);
     }
 
     private void selectChipButton_Click(object sender, EventArgs e)
@@ -241,7 +289,8 @@ public partial class MainProgramForm : Form
             portComboBox.Visible = true;
             temperatureChart.Series["dummy"].Points.Clear();
             int totalReballingTime = (chipConfiguratonData.PreheatDuration + chipConfiguratonData.CoolingDuration + chipConfiguratonData.SoakDuration + chipConfiguratonData.CoolingDuration) / 1000;
-            temperatureChart.Series["dummy"].Points.AddXY(totalReballingTime, 0);
+            temperatureChart.Series["dummy"].Points.AddXY(totalReballingTime, chipConfiguratonData.DamageTemperarure + 20);
+            drawChipTemperatureGraph();
         }
     }
 
@@ -252,6 +301,16 @@ public partial class MainProgramForm : Form
         startButton.Image = pictureBox14.Image;
         pauseButton.Image = pictureBox16.Image;
         HasStartedReballing = false;
+        exitButton.Visible = true;
+    }
+
+    private void emergencyCoolingButton_Click(object sender, EventArgs e)
+    {
+        arduinoPort.WriteLine("6");
+        runningIndicator.Visible = false;
+        startButton.Image = pictureBox14.Image;
+        pauseButton.Image = pictureBox16.Image;
+        HasStartedReballing = true;
         exitButton.Visible = true;
     }
 }

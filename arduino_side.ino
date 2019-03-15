@@ -24,6 +24,7 @@
 #define F1 28
 #define F2 29
 
+#define EMERGENCY_COOLING_BUTTON_PRESSED 6
 #define START_BUTTON_PRESSED 7
 #define STOP_BUTTON_PRESSED 8
 #define PAUSE_BUTTON_PRESSED 9
@@ -42,7 +43,8 @@ enum class State {
     SOAK = 4,
     REFLOW = 5,
     COOLING = 6,
-    FINISHED = 7
+    FINISHED = 7,
+    EMERGENCY_COOLING = 8
 };
 
 struct ChipConfigurationData {
@@ -140,12 +142,12 @@ int boolToBin(bool b) {
   return b ? 1 : 0;
 }
 
-void sendDataToComputer(const PinData& data, int tt) {
+void sendDataToComputer(const PinData& data) {
     Serial.print(data.controlTemperature);
     Serial.print("|");
     Serial.print(data.lowerProbeTemperature);
     Serial.print("|");
-    Serial.print(tt);
+    Serial.print(data.upperProbeTemperature);
     Serial.print("|");
     Serial.print(boolToBin(data.lowerResistancesAreTurnedOn[0]));
     Serial.print("|");
@@ -247,6 +249,8 @@ void readDataFromPC() {
             currentState = State::FINISHED;
         } else if (messageFromPC == PAUSE_BUTTON_PRESSED) {
             pauseReballing();
+        } else if (messageFromPC == EMERGENCY_COOLING_BUTTON_PRESSED) {
+            currentState = State::EMERGENCY_COOLING;
         }
 
         if(getValue(message, ',', 1) == "") return;
@@ -293,7 +297,7 @@ void doNormalStateUpdate(int initialTemperature, int finalTemperature, int state
         currentStateStartTime = millis();
     }
     
-    sendDataToComputer(pinData, targetTemperature);
+    sendDataToComputer(pinData);
 }
 
 void setup() {
@@ -324,13 +328,13 @@ void loop() {
             turnAllResistancesOff();
             turnAllFansOn();
             if(millis() > pauseStartTime + PAUSE_FAN_DURATION) currentState = State::PAUSED_FANS_OFF;
-            sendDataToComputer(pinData, 0);
+            sendDataToComputer(pinData);
             break;
         }
         
         case State::PAUSED_FANS_OFF: {
             turnAllFansOff();
-            sendDataToComputer(pinData, 0);
+            sendDataToComputer(pinData);
             break;
         }
         
@@ -357,6 +361,14 @@ void loop() {
         case State::FINISHED: {
             turnAllResistancesOff();
             turnAllFansOff();
+            break;
+        }
+        
+        case State::EMERGENCY_COOLING: {
+            turnAllResistancesOff();
+            turnAllFansOn();
+            sendDataToComputer(pinData);
+            break;
         }
     }
     

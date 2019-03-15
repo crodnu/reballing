@@ -39,6 +39,8 @@
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.exitButton = new System.Windows.Forms.Button();
             this.portComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,7 +52,6 @@
             this.runningIndicator = new System.Windows.Forms.PictureBox();
             this.sendDataButton = new System.Windows.Forms.Button();
             this.temperatureChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.timer = new System.Windows.Forms.Timer(this.components);
             this.selectChipButton = new System.Windows.Forms.Button();
             this.lowerProbeTemperature = new System.Windows.Forms.Label();
             this.upperProbeTemperature = new System.Windows.Forms.Label();
@@ -93,6 +94,7 @@
             this.soakProgressBar = new System.Windows.Forms.ProgressBar();
             this.reflowProgressBar = new System.Windows.Forms.ProgressBar();
             this.coolingProgressBar = new System.Windows.Forms.ProgressBar();
+            this.emergencyCoolingButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.runningIndicator)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.temperatureChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lowerResistanceIcon1)).BeginInit();
@@ -113,6 +115,7 @@
             // 
             // exitButton
             // 
+            this.exitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exitButton.Location = new System.Drawing.Point(735, 7);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(88, 35);
@@ -225,7 +228,7 @@
             this.temperatureChart.Name = "temperatureChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
-            series1.Color = System.Drawing.Color.MediumTurquoise;
+            series1.Color = System.Drawing.Color.DarkTurquoise;
             series1.Legend = "Legend1";
             series1.Name = "Temperatura de enfriamiento";
             series2.ChartArea = "ChartArea1";
@@ -235,34 +238,45 @@
             series2.Name = "Temperatura de fundición";
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
-            series3.Color = System.Drawing.Color.Yellow;
+            series3.Color = System.Drawing.Color.Goldenrod;
             series3.Legend = "Legend1";
             series3.Name = "Temperatura de activación";
             series4.BorderWidth = 4;
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
-            series4.Color = System.Drawing.Color.OliveDrab;
+            series4.Color = System.Drawing.Color.DarkOliveGreen;
             series4.LabelBorderWidth = 3;
             series4.Legend = "Legend1";
             series4.Name = "Temperatura de precalentamiento";
             series4.YValuesPerPoint = 3;
-            series5.BorderWidth = 4;
             series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Color = System.Drawing.Color.Green;
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Area;
+            series5.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             series5.Legend = "Legend1";
-            series5.Name = "Sonda de abajo";
+            series5.Name = "Enfriamiento de emergencia";
             series6.BorderWidth = 4;
             series6.ChartArea = "ChartArea1";
             series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Color = System.Drawing.Color.Blue;
+            series6.Color = System.Drawing.Color.PaleGreen;
             series6.Legend = "Legend1";
-            series6.Name = "Sonda de arriba";
+            series6.Name = "Sonda de abajo";
+            series7.BorderWidth = 4;
             series7.ChartArea = "ChartArea1";
-            series7.Color = System.Drawing.Color.Transparent;
-            series7.IsVisibleInLegend = false;
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series7.Color = System.Drawing.Color.Blue;
             series7.Legend = "Legend1";
-            series7.Name = "dummy";
+            series7.Name = "Sonda de arriba";
+            series8.BorderWidth = 5;
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series8.Color = System.Drawing.Color.DarkOrchid;
+            series8.Legend = "Legend1";
+            series8.Name = "Curva del chip";
+            series9.ChartArea = "ChartArea1";
+            series9.Color = System.Drawing.Color.Transparent;
+            series9.IsVisibleInLegend = false;
+            series9.Legend = "Legend1";
+            series9.Name = "dummy";
             this.temperatureChart.Series.Add(series1);
             this.temperatureChart.Series.Add(series2);
             this.temperatureChart.Series.Add(series3);
@@ -270,13 +284,11 @@
             this.temperatureChart.Series.Add(series5);
             this.temperatureChart.Series.Add(series6);
             this.temperatureChart.Series.Add(series7);
+            this.temperatureChart.Series.Add(series8);
+            this.temperatureChart.Series.Add(series9);
             this.temperatureChart.Size = new System.Drawing.Size(884, 393);
             this.temperatureChart.TabIndex = 27;
             this.temperatureChart.Text = "chart1";
-            // 
-            // timer
-            // 
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // selectChipButton
             // 
@@ -435,7 +447,7 @@
             this.pictureBox13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.pictureBox13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox13.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox13.Image")));
-            this.pictureBox13.Location = new System.Drawing.Point(1083, 9);
+            this.pictureBox13.Location = new System.Drawing.Point(1097, 382);
             this.pictureBox13.Name = "pictureBox13";
             this.pictureBox13.Size = new System.Drawing.Size(75, 70);
             this.pictureBox13.TabIndex = 69;
@@ -448,7 +460,7 @@
             this.pictureBox15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.pictureBox15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox15.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox15.Image")));
-            this.pictureBox15.Location = new System.Drawing.Point(1083, 87);
+            this.pictureBox15.Location = new System.Drawing.Point(1097, 382);
             this.pictureBox15.Name = "pictureBox15";
             this.pictureBox15.Size = new System.Drawing.Size(75, 70);
             this.pictureBox15.TabIndex = 71;
@@ -461,7 +473,7 @@
             this.pictureBox16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.pictureBox16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox16.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox16.Image")));
-            this.pictureBox16.Location = new System.Drawing.Point(1083, 87);
+            this.pictureBox16.Location = new System.Drawing.Point(1097, 382);
             this.pictureBox16.Name = "pictureBox16";
             this.pictureBox16.Size = new System.Drawing.Size(75, 70);
             this.pictureBox16.TabIndex = 72;
@@ -505,7 +517,7 @@
             this.pictureBox14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.pictureBox14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox14.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox14.Image")));
-            this.pictureBox14.Location = new System.Drawing.Point(1083, 9);
+            this.pictureBox14.Location = new System.Drawing.Point(1097, 382);
             this.pictureBox14.Name = "pictureBox14";
             this.pictureBox14.Size = new System.Drawing.Size(75, 70);
             this.pictureBox14.TabIndex = 70;
@@ -725,12 +737,25 @@
             this.coolingProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.coolingProgressBar.TabIndex = 99;
             // 
+            // emergencyCoolingButton
+            // 
+            this.emergencyCoolingButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.emergencyCoolingButton.Location = new System.Drawing.Point(1084, 55);
+            this.emergencyCoolingButton.Name = "emergencyCoolingButton";
+            this.emergencyCoolingButton.Size = new System.Drawing.Size(88, 126);
+            this.emergencyCoolingButton.TabIndex = 100;
+            this.emergencyCoolingButton.Text = "Enfriar";
+            this.emergencyCoolingButton.UseVisualStyleBackColor = true;
+            this.emergencyCoolingButton.Visible = false;
+            this.emergencyCoolingButton.Click += new System.EventHandler(this.emergencyCoolingButton_Click);
+            // 
             // MainProgramForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.ClientSize = new System.Drawing.Size(1184, 639);
+            this.Controls.Add(this.emergencyCoolingButton);
             this.Controls.Add(this.coolingProgressBar);
             this.Controls.Add(this.reflowProgressBar);
             this.Controls.Add(this.soakProgressBar);
@@ -815,7 +840,6 @@
         private System.Windows.Forms.Button pauseButton;
         private System.Windows.Forms.PictureBox runningIndicator;
         private System.Windows.Forms.Button sendDataButton;
-        private System.Windows.Forms.Timer timer;
         public System.Windows.Forms.DataVisualization.Charting.Chart temperatureChart;
         private System.Windows.Forms.Button selectChipButton;
         private System.Windows.Forms.Label lowerProbeTemperature;
@@ -859,6 +883,7 @@
         private System.Windows.Forms.ProgressBar soakProgressBar;
         private System.Windows.Forms.ProgressBar reflowProgressBar;
         private System.Windows.Forms.ProgressBar coolingProgressBar;
+        private System.Windows.Forms.Button emergencyCoolingButton;
     }
 }
 
