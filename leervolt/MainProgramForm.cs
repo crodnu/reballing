@@ -50,6 +50,11 @@ public partial class MainProgramForm : Form
         {
             portComboBox.Items.Add(mostrar);
         }
+
+        preheatProgressBar.BarColor = Brushes.ForestGreen;
+        soakProgressBar.BarColor = Brushes.DarkOrange;
+        reflowProgressBar.BarColor = Brushes.Red;
+        coolingProgressBar.BarColor = Brushes.DarkTurquoise;
     }
 
     private void exitButton_Click(object sender, EventArgs e)
