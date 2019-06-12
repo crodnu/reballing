@@ -69,12 +69,43 @@ struct PinData {
     int upperProbeTemperature;
 };
 
+struct TickStateComparisonData {
+    int deltaControlTemperature;
+    int deltaLowerProbeTemperature;
+    int deltaUpperProbeTemperature;
+    int deltaTargetTemperature;
+};
+
+struct TickState {
+    int controlTemperature = ROOM_TEMPERATURE;
+    int lowerProbeTemperature = ROOM_TEMPERATURE;
+    int upperProbeTemperature = ROOM_TEMPERATURE;
+    int targetTemperature = targetTemperature;
+    
+    TickState(const PinData& pinData, int targetTemperature) {
+        this->controlTemperature = pinData.controlTemperature;
+        this->lowerProbeTemperature = pinData.lowerProbeTemperature;
+        this->upperProbeTemperature = pinData.upperProbeTemperature;
+        this->targetTemperature = targetTemperature;
+    }
+    
+    TickStateComparisonData compareTickStates(const TickState& previousState) const {
+        TickStateComparisonData data;
+        data.deltaControlTemperature = controlTemperature - previousState.controlTemperature;
+        data.deltaLowerProbeTemperature = lowerProbeTemperature - previousState.lowerProbeTemperature;
+        data.deltaUpperProbeTemperature = upperProbeTemperature - previousState.upperProbeTemperature;
+        data.deltaTargetTemperature = targetTemperature - previousState.targetTemperature;
+        return data;
+    }
+}
+
 State pausedState = State::NOT_STARTED; // Stores the old state of the machine when it's paused.
 State currentState = State::NOT_STARTED;
 ChipConfigurationData chipConfigurationData;
 unsigned long pauseStartTime = 0;
 unsigned long currentStateStartTime = 0;
 double statePercentage;
+TickState previousTickState;
 
 MAX6675_Thermocouple controlThermocouple(CONTROL_THERMOCOUPLE_SCK_PIN, CONTROL_THERMOCOUPLE_CS_PIN, CONTROL_THERMOCOUPLE_SO_PIN);
 MAX6675_Thermocouple lowerThermocouple(LOWER_THERMOCOUPLE_SCK_PIN, LOWER_THERMOCOUPLE_CS_PIN, LOWER_THERMOCOUPLE_SO_PIN);
@@ -95,6 +126,22 @@ void turnAllFansOn() {
 
 void turnAllFansOff() {
     turnFanOff(F1);
+    turnFanOff(F2);
+}
+
+void turnAllUpperFansOn() {
+    turnFanOn(F1);
+}
+
+void turnAllUpperFansOff() {
+    turnFanOff(F1);
+}
+
+void turnAllLowerFansOn() {
+    turnFanOn(F2);
+}
+
+void turnAllLowerFansOff() {
     turnFanOff(F2);
 }
 
@@ -278,13 +325,23 @@ int getStateTemperature(int startTime, int stateDuration, int initialTemperature
 void doNormalStateUpdate(int initialTemperature, int finalTemperature, int stateDuration, State nextState, const PinData& pinData) {
     statePercentage = getStatePercentage(currentStateStartTime, stateDuration);
     int targetTemperature = getStateTemperature(currentStateStartTime, stateDuration, initialTemperature, finalTemperature);
+    const TickState currentTickState(pinData, targetTemperature);
+    const TickStateComparisonData comparisonData = currentTickState.compareTickStates(previousTickState);
     
-    if(pinData.controlTemperature < targetTemperature) {
-        turnAllFansOff();
-        turnAllResistancesOn();
+    if(pinData.upperProbeTemperature < targetTemperature) {
+        turnAllUpperFansOff();
+        turnAllUpperResistancesOn();
     } else {
-        turnAllFansOn();
-        turnAllResistancesOff();
+        turnAllUpperFansOn();
+        turnAllUpperResistancesOff();
+    }
+    
+    if(pinData.lowerProbeTemperature < targetTemperature) {
+        turnAllLowerFansOff();
+        turnAllLowerResistancesOn();
+    } else {
+        turnAllLowerFansOn();
+        turnAllLowerResistancesOff();
     }
     
     if(pinData.controlTemperature > chipConfigurationData.damageTemperarure) {
@@ -297,6 +354,7 @@ void doNormalStateUpdate(int initialTemperature, int finalTemperature, int state
         currentStateStartTime = millis();
     }
     
+    previousTickState = currentTickState
     sendDataToComputer(pinData);
 }
 
@@ -371,7 +429,7 @@ void loop() {
             break;
         }
     }
-    
+
     readDataFromPC();
     delay(UPDATE_DELAY_DURATION);
 }
